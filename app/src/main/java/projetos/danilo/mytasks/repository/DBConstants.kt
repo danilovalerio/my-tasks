@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks
+package projetos.danilo.mytasks.repository
 
 const val DATABASE_NAME = "dbTarefas"
 const val DATABASE_VERSION = 1

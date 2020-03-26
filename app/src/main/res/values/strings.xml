@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">MyTasks</string>
+    <string name="app_name">My Tasks</string>
+    <string name="titulo_minhas_tarefas">Minhas Tarefas</string>
+
+
+    <!--  TarefasDetalhesActivity  -->
+    <string name="titulo_tarefa">Tarefa</string>
+    <string name="titulo_observacoes">Observações:</string>
+    <string name="titulo_detalhe_tarefas">Detalhe da Tarefas</string>
+    <string name="titulo_adicao">Adicionar Tarefa</string>
+    <string name="hint_titulo_tarefa">Nome da tarefa</string>
+    <string name="texto_botao_adicionar">Adicionar</string>
+    <string name="texto_botao_cancelar">Cancelar</string>
+    <string name="texto_switch_concluida">"Concluída "</string>
 </resources>

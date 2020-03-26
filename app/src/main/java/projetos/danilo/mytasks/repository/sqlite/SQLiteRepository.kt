@@ -6,9 +6,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import projetos.danilo.mytasks.*
 import projetos.danilo.mytasks.model.Tarefa
-import projetos.danilo.mytasks.repository.TarefaRepository
+import projetos.danilo.mytasks.repository.*
 
 class SQLiteRepository(ctx: Context) : TarefaRepository {
     private val helper = TarefaSqlHelper(ctx)
