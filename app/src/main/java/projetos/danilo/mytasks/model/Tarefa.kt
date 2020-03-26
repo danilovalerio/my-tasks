@@ -5,5 +5,5 @@ data class Tarefa (
     val titulo: String,
     val descricao: String,
     val comentario: String,
-    val concluida: Int
+    val concluida: Int //0 false 1 true
 )

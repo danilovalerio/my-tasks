@@ -39,6 +39,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
             put(COLUMN_TITULO, tarefa.titulo)
             put(COLUMN_DESCRICAO, tarefa.descricao)
             put(COLUMN_COMENTARIO, tarefa.comentario)
+            put(COLUMN_CONCLUIDA, tarefa.concluida)
         }
 
         db.insertWithOnConflict(
@@ -113,8 +114,8 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         val cursor = db.rawQuery(sql, null)
 
         while (cursor.moveToNext()){
-            val nota = notaFromCursor(cursor)
-            notasMutableList.add(nota)
+            val tarefa = notaFromCursor(cursor)
+            notasMutableList.add(tarefa)
         }
 
         cursor.close()
