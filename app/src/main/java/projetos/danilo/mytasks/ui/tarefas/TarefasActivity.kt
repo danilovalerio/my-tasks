@@ -77,4 +77,5 @@ class TarefasActivity : BaseActivity() {
             }
         }
     }
+
 }

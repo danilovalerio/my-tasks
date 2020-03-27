@@ -15,11 +15,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            style="@style/MyTitleViewLabel"
             android:id="@+id/tv_tituloTarefa"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/checkBoxConcluida"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
+            android:textStyle="bold"
             android:text="@string/texto_switch_concluida"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_tituloTarefa"
@@ -44,7 +45,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_tituloTarefa"
@@ -55,7 +55,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_descricaoTarefa"

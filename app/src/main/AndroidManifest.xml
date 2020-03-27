@@ -17,13 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.addTarefas.AdicionarTarefasActivity"
-            android:parentActivityName=".ui.tarefas.TarefasActivity"/>
-
-        <activity android:name=".ui.detalhes.TarefasDetalhesActivity"
-            android:parentActivityName=".ui.tarefas.TarefasActivity"/>
-
+        <activity
+            android:name=".ui.addTarefas.AdicionarTarefasActivity"
+            android:parentActivityName=".ui.tarefas.TarefasActivity" />
+        <activity
+            android:name=".ui.detalhes.TarefasDetalhesActivity"
+            android:parentActivityName=".ui.tarefas.TarefasActivity" />
     </application>
 
 </manifest>

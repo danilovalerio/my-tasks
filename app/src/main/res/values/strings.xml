@@ -12,4 +12,9 @@
     <string name="texto_botao_adicionar">Adicionar</string>
     <string name="texto_botao_cancelar">Cancelar</string>
     <string name="texto_switch_concluida">"Concluída "</string>
+    <string name="title_activity_teste_fragments">TesteFragmentsActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="search_title">buscar</string>
 </resources>

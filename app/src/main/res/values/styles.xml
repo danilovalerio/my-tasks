@@ -8,7 +8,20 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!--    Sobrescrevendo o style do textView    -->
+        <item name="android:textViewStyle">@style/MinhaTextView</item>
 
     </style>
+
+    <style name="MinhaTextView">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="MyTitleViewLabel">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 
 </resources>
