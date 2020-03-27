@@ -15,8 +15,8 @@ class TarefasUseCase {
         return database.getAllTarefas()
     }
 
-    fun adicionarTarefa(nota: Tarefa) {
-        database.save(nota)
+    fun adicionarTarefa(tarefa: Tarefa) {
+        database.save(tarefa)
     }
 
     fun buscarTarefaaPorTitulo(termo: String){

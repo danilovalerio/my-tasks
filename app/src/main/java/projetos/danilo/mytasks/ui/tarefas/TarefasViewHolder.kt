@@ -13,7 +13,7 @@ class TarefasViewHolder(
     val titulo = itemView.tv_tituloTarefa
     val descricao = itemView.tv_descricaoTarefa
     val comentario = itemView.tv_comentarioTarefa
-    val concluida = itemView.switch_concluida
+    val concluida = itemView.checkBoxConcluida
 
     fun bindView(tarefa: Tarefa){
         titulo.text = tarefa.titulo
@@ -22,7 +22,6 @@ class TarefasViewHolder(
         if (tarefa.concluida == 1){
             concluida.isChecked = true
         }
-        
 
         itemView.setOnClickListener {
             onItemClickListener.invoke(tarefa)

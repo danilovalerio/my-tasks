@@ -74,7 +74,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         val db = helper.readableDatabase
 
         val cursor = db.rawQuery(sql, arrayOf(id.toString()))
-        val hotel = if(cursor.moveToNext()) notaFromCursor(cursor) else null
+        val hotel = if(cursor.moveToNext()) tarefaFromCursor(cursor) else null
 
         notaLiveData.value = hotel
 
@@ -94,7 +94,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         val notas = ArrayList<Tarefa>()
 
         while (cursor.moveToNext()){
-            val nota = notaFromCursor(cursor)
+            val nota = tarefaFromCursor(cursor)
             notas.add(nota)
         }
 
@@ -113,7 +113,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         val cursor = db.rawQuery(sql, null)
 
         while (cursor.moveToNext()){
-            val tarefa = notaFromCursor(cursor)
+            val tarefa = tarefaFromCursor(cursor)
             notasMutableList.add(tarefa)
         }
 
@@ -123,7 +123,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         return notasMutableList
     }
 
-    private fun notaFromCursor(cursor: Cursor): Tarefa {
+    private fun tarefaFromCursor(cursor: Cursor): Tarefa {
         val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
         val titulo = cursor.getString(cursor.getColumnIndex(COLUMN_TITULO))
         val descricao = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRICAO))

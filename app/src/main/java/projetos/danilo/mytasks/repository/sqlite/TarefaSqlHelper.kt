@@ -16,7 +16,7 @@ class TarefaSqlHelper(ctx: Context) :
                     "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,"+
                     "$COLUMN_TITULO TEXT NOT NULL,"+
                     "$COLUMN_DESCRICAO TEXT NOT NULL,"+
-                    "$COLUMN_COMENTARIO BLOB"+
+                    "$COLUMN_COMENTARIO BLOB,"+
                     "$COLUMN_CONCLUIDA INTEGER)"
         )
     }

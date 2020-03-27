@@ -71,7 +71,7 @@ class TarefasActivity : BaseActivity() {
         if (requestCode == ACTIVITY_ADICIONAR_NOTA_REQUEST){
             if (resultCode == Activity.RESULT_OK){
                 val resultado = data?.getStringExtra(EXTRA_TITULO) ?: "-"
-                val tarefaNova = Tarefa(0, resultado, "nota criada", null , 0)
+                val tarefaNova = Tarefa(0, resultado, "nota criada", null , 1)
 
                 viewModel.adicionarNota(tarefaNova)
             }
