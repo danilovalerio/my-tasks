@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_pesquisa"
+        android:title="@string/action_pesquisa"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+    <item android:id="@+id/action_nova"
+        android:title="@string/action_nova_tarefa"
+        android:icon="@drawable/ic_add_circle"
+        app:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/action_info"
+        android:title="@string/action_info"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        app:showAsAction="never"/>
+</menu>
