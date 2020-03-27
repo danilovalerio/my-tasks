@@ -19,7 +19,7 @@ class TarefasUseCase {
         database.save(tarefa)
     }
 
-    fun buscarTarefaaPorTitulo(termo: String){
-        database.search(termo)
+    fun buscarTarefasPorTitulo(termo: String) : List<Tarefa>{
+        return database.search(termo)
     }
 }

@@ -1,7 +1,5 @@
 package projetos.danilo.mytasks.ui.base
 
-import android.view.MenuItem
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 

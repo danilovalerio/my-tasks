@@ -28,4 +28,12 @@ class TarefasViewModel : ViewModel() {
         tarefasUseCase.adicionarTarefa(nota)
         getListaTarefas()
     }
+
+    fun buscaPorTiulo(termo: String){
+        if (termo.isNotEmpty()){
+            notasLiveData.value = tarefasUseCase.buscarTarefasPorTitulo(termo)
+        } else {
+            getListaTarefas()
+        }
+    }
 }

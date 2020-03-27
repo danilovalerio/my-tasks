@@ -81,11 +81,12 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         return notaLiveData
     }
 
-    override fun search(term: String): LiveData<List<Tarefa>> {
-        var sql = "SELECT * FROM $TABLE_TAREFA"
+    override fun search(term: String):  MutableList<Tarefa> {
+        if(notasMutableList.size > 0) notasMutableList.clear()
+        var sql = "SELECT * FROM $TABLE_TAREFA "
         var args: Array<String>? = null
         if(term.isNotEmpty()){
-            sql += "WHERE $COLUMN_TITULO LIKE ?"
+            sql += "WHERE $COLUMN_TITULO LIKE ? "
             args = arrayOf("%$term%")
         }
         sql += "ORDER BY $COLUMN_TITULO"
@@ -95,13 +96,13 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
 
         while (cursor.moveToNext()){
             val nota = tarefaFromCursor(cursor)
-            notas.add(nota)
+            notasMutableList.add(nota)
         }
 
         cursor.close()
         db.close()
-        notasLiveData.value = notas
-        return notasLiveData
+
+        return notasMutableList
     }
 
     fun getAllTarefas(): MutableList<Tarefa> {
