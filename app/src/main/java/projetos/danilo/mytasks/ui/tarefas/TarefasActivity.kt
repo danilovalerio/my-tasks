@@ -79,7 +79,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         if (requestCode == ACTIVITY_ADICIONAR_NOTA_REQUEST){
             if (resultCode == Activity.RESULT_OK){
                 val resultado = data?.getStringExtra(EXTRA_TITULO) ?: "-"
-                val tarefaNova = Tarefa(0, resultado, "nota criada", null , 1)
+                val tarefaNova = Tarefa(0, resultado, "nota criada", null , null)
 
                 viewModel.adicionarNota(tarefaNova)
             }
@@ -110,7 +110,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
 
         when(item.itemId){
             R.id.action_nova -> {

@@ -9,6 +9,7 @@
     <item android:id="@+id/action_nova"
         android:title="@string/action_nova_tarefa"
         android:icon="@drawable/ic_add_circle"
+        android:visible="false"
         app:showAsAction="ifRoom|withText"/>
     <item android:id="@+id/action_info"
         android:title="@string/action_info"
