@@ -22,6 +22,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MeuInputTextLayout">
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+
 
 
 </resources>

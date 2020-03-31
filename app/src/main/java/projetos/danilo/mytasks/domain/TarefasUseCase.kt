@@ -3,6 +3,7 @@ package projetos.danilo.mytasks.domain
 import android.content.Context
 import projetos.danilo.mynotesmvvm.data.repository.sqlite.SQLiteRepository
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.util.verificaTexto
 
 class TarefasUseCase {
     lateinit var database: SQLiteRepository
@@ -16,7 +17,13 @@ class TarefasUseCase {
     }
 
     fun adicionarTarefa(tarefa: Tarefa) {
-        database.save(tarefa)
+        val tarefaValidada = Tarefa(0,
+            verificaTexto(tarefa.titulo),
+            verificaTexto(tarefa.descricao),
+            tarefa.comentario?.let { verificaTexto(it) },
+            null)
+
+        database.save(tarefaValidada)
     }
 
     fun buscarTarefasPorTitulo(termo: String) : List<Tarefa>{

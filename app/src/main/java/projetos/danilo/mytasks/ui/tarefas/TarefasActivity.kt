@@ -16,10 +16,11 @@ import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity
+import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_COMENTARIO
+import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_DESCRICAO
 import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_TITULO
 import projetos.danilo.mytasks.ui.base.BaseActivity
 import projetos.danilo.mytasks.ui.detalhes.TarefasDetalhesActivity
-import projetos.danilo.mytasks.util.toastLong
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     private val viewModel by lazy {
@@ -32,6 +33,8 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     private var buscaView: SearchView? = null
 
     val ACTIVITY_ADICIONAR_NOTA_REQUEST = 1
+    val CHAR_DEFAULT = "-"
+    val ZERO_DEFAULT:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,18 +75,20 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
             val intent = Intent(this, AdicionarTarefasActivity::class.java)
             startActivityForResult(intent, ACTIVITY_ADICIONAR_NOTA_REQUEST)
         }
-
-//        viewModel.getListaTarefas()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ACTIVITY_ADICIONAR_NOTA_REQUEST){
             if (resultCode == Activity.RESULT_OK){
-                val resultado = data?.getStringExtra(EXTRA_TITULO) ?: "-"
-                val tarefaNova = Tarefa(0, resultado, "nota criada", null , null)
+//                val resultado = data?.getStringExtra(EXTRA_TITULO) ?: "-"
+                val tarefaNova = Tarefa(ZERO_DEFAULT,
+                    data?.getStringExtra(EXTRA_TITULO) ?: "-",
+                    data?.getStringExtra(EXTRA_DESCRICAO) ?: "-",
+                    data?.getStringExtra(EXTRA_COMENTARIO) ?: "-" ,
+                    null)
 
-                viewModel.adicionarNota(tarefaNova)
+                viewModel.adicionarTarefa(tarefaNova)
             }
         }
     }

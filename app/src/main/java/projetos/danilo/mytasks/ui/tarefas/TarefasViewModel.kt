@@ -24,8 +24,8 @@ class TarefasViewModel : ViewModel() {
         notasLiveData.value = listaTarefas
     }
 
-    fun adicionarNota(nota: Tarefa){
-        tarefasUseCase.adicionarTarefa(nota)
+    fun adicionarTarefa(tarefa: Tarefa){
+        tarefasUseCase.adicionarTarefa(tarefa)
         getListaTarefas()
     }
 
@@ -37,7 +37,7 @@ class TarefasViewModel : ViewModel() {
         }
     }
 
-    fun deletarNota(id: String){
+    fun deletarTarefa(id: String){
         tarefasUseCase.deleteTarefa(id)
     }
 }

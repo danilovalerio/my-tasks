@@ -7,7 +7,6 @@
     <string name="titulo_observacoes">Observações:</string>
     <string name="titulo_detalhe_tarefas">Detalhe da Tarefas</string>
     <string name="titulo_adicao">Adicionar Tarefa</string>
-    <string name="hint_titulo_tarefa">Nome da tarefa</string>
     <string name="texto_botao_adicionar">Adicionar</string>
     <string name="texto_botao_cancelar">Cancelar</string>
     <string name="texto_switch_concluida">"Concluída "</string>
@@ -22,5 +21,10 @@
     <string name="action_nova_tarefa">Nova Tarefa</string>
     <string name="action_info">Info</string>
     <string name="action_hint_pesquisa">Procurar por Tarefa</string>
+
+    <!--  AdicionarTarefasActivity  -->
+    <string name="hint_titulo_tarefa">Titulo</string>
+    <string name="hint_descricao">Descricão</string>
+    <string name="hint_comentario">Comentário...</string>
 
 </resources>

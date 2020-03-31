@@ -33,8 +33,8 @@ class TarefasDetalhesActivity : BaseActivity() {
         imgbtn_excluir.setOnClickListener {
             val idParaExclusao = intent.getStringExtra(EXTRA_ID)
             val tituloNotaExcluida = intent.getStringExtra(EXTRA_TITULO)
-            viewModelTarefas.deletarNota(idParaExclusao)
-            toastLong("Nota $tituloNotaExcluida excluída com sucesso!")
+            viewModelTarefas.deletarTarefa(idParaExclusao)
+            toastLong("Tarefa $tituloNotaExcluida excluída com sucesso!")
             finish()
         }
     }
