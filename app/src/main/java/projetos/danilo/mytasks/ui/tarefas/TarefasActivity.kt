@@ -19,6 +19,7 @@ import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity
 import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_TITULO
 import projetos.danilo.mytasks.ui.base.BaseActivity
 import projetos.danilo.mytasks.ui.detalhes.TarefasDetalhesActivity
+import projetos.danilo.mytasks.util.toastLong
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     private val viewModel by lazy {
@@ -54,6 +55,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
                         TarefasAdapter(tarefas) { tarefa ->
                             val intent = TarefasDetalhesActivity.getStartIntent(
                                 this@TarefasActivity,
+                                tarefa.id,
                                 tarefa.titulo,
                                 tarefa.descricao,
                                 tarefa.comentario ?: " - "
@@ -71,7 +73,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
             startActivityForResult(intent, ACTIVITY_ADICIONAR_NOTA_REQUEST)
         }
 
-        viewModel.getListaTarefas()
+//        viewModel.getListaTarefas()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -87,7 +89,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     /** Configuração das opções na Action Bar */
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.tarefa, menu)
 
@@ -112,10 +113,10 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId){
-            R.id.action_nova -> {
-                val intent = Intent(this, AdicionarTarefasActivity::class.java)
-                startActivityForResult(intent, ACTIVITY_ADICIONAR_NOTA_REQUEST)
-            }
+//            R.id.action_nova -> {
+//                val intent = Intent(this, AdicionarTarefasActivity::class.java)
+//                startActivityForResult(intent, ACTIVITY_ADICIONAR_NOTA_REQUEST)
+//            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -133,7 +134,11 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         return true
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?) = true //para expandir a View
+    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+        Log.i("EXPANDIR","EXPANDINDO SEARCHVIEW")
+        onQueryTextSubmit("")
+        return true //para expandir a View
+    }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         ultimoTermoProcurado = ""
@@ -141,6 +146,12 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         Log.i("TEXTO_PROCURADO", "TEXTO LIMPO"+ultimoTermoProcurado)
         viewModel.buscaPorTiulo(ultimoTermoProcurado)
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /** Mantém nossa lista atualizada */
+        viewModel.getListaTarefas()
     }
 
     companion object {

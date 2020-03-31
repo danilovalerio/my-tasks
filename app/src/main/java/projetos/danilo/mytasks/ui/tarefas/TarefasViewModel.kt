@@ -36,4 +36,8 @@ class TarefasViewModel : ViewModel() {
             getListaTarefas()
         }
     }
+
+    fun deletarNota(id: String){
+        tarefasUseCase.deleteTarefa(id)
+    }
 }

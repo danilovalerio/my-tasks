@@ -124,6 +124,14 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         return notasMutableList
     }
 
+    fun excluirTarefa(id: String){
+        val db = helper.writableDatabase
+
+        val args = id
+        db.delete("$TABLE_TAREFA", "$COLUMN_ID = ?", arrayOf(args))
+        db.close()
+    }
+
     private fun tarefaFromCursor(cursor: Cursor): Tarefa {
         val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
         val titulo = cursor.getString(cursor.getColumnIndex(COLUMN_TITULO))
@@ -133,4 +141,6 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
 
         return Tarefa(id, titulo, descricao, comentario, concluida)
     }
+
+
 }

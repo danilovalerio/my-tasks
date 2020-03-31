@@ -22,4 +22,8 @@ class TarefasUseCase {
     fun buscarTarefasPorTitulo(termo: String) : List<Tarefa>{
         return database.search(termo)
     }
+
+    fun deleteTarefa(id: String){
+        database.excluirTarefa(id)
+    }
 }
