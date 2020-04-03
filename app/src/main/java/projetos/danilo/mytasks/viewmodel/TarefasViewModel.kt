@@ -1,12 +1,27 @@
 package projetos.danilo.mytasks.viewmodel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import projetos.danilo.mytasks.usecase.TarefasUseCase
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.viewmodel.states.TarefasEvent
+import projetos.danilo.mytasks.viewmodel.states.TarefasState
+import kotlinx.coroutines.launch
 
-class TarefasViewModel : ViewModel() {
+class TarefasViewModel(private val useCase: TarefasUseCase) : BaseViewModel() {
+    private val state: MutableLiveData<TarefasState> = MutableLiveData()
+    private val event: MutableLiveData<TarefasEvent> = MutableLiveData()
+    val viewState: LiveData<TarefasState> = state
+    val viewEvent: LiveData<TarefasEvent> = event
+
+    //todo: CONTINUAR A APRTIR DAQUI A REFATORAÇÃO
+
+    fun inicializar(){
+        launch {
+            state.postValue(TarefasState.ListaTarefas(useCase.consultarLista()))
+        }
+    }
 
     val tarefasUseCase = TarefasUseCase()
     val notasLiveData: MutableLiveData<List<Tarefa>> = MutableLiveData()
