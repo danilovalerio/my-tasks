@@ -9,6 +9,7 @@ import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.ui.base.BaseActivity
 import projetos.danilo.mytasks.ui.tarefas.providerTarefasViewModel
 import projetos.danilo.mytasks.util.toastLong
+import projetos.danilo.mytasks.util.toastShort
 
 class TarefasDetalhesActivity : BaseActivity() {
 
@@ -37,6 +38,13 @@ class TarefasDetalhesActivity : BaseActivity() {
             toastLong("Tarefa $tituloNotaExcluida excluída com sucesso!")
             finish()
         }
+
+        checkBoxConcluida.setOnClickListener {
+            val idParaAtualizar = intent.getStringExtra(EXTRA_ID)
+            val conclusao = intent.getStringExtra(EXTRA_CONCLUSAO)
+            toastShort("Clicou")
+            viewModelTarefas.alterarConclusao(idParaAtualizar, conclusao)
+        }
     }
 
     /** objeto Nota para essa activity*/
@@ -45,14 +53,16 @@ class TarefasDetalhesActivity : BaseActivity() {
         private const val EXTRA_TITULO = "EXTRA_TITULO"
         private const val EXTRA_DESCRICAO = "EXTRA_DESCRICAO"
         private const val EXTRA_COMENTARIO = "EXTRA_COMENTARIO"
+        private const val EXTRA_CONCLUSAO = "EXTRA_CONCLUSAO"
 
-        fun getStartIntent(ctx: Context, id: Long, titulo: String, descricao: String, comentario: String): Intent {
+        fun getStartIntent(ctx: Context, id: Long, titulo: String, descricao: String, comentario: String, conclusao: String): Intent {
             /**Intent(activity de origem, activity de destino*/
             val intent = Intent(ctx, TarefasDetalhesActivity::class.java)
             intent.putExtra(EXTRA_ID, id.toString())
             intent.putExtra(EXTRA_TITULO, titulo)
             intent.putExtra(EXTRA_DESCRICAO, descricao)
             intent.putExtra(EXTRA_COMENTARIO, comentario)
+            intent.putExtra(EXTRA_CONCLUSAO, conclusao)
 
             return intent
         }

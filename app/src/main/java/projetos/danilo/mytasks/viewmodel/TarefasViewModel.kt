@@ -1,9 +1,9 @@
-package projetos.danilo.mytasks.ui.tarefas
+package projetos.danilo.mytasks.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import projetos.danilo.mytasks.domain.TarefasUseCase
+import projetos.danilo.mytasks.usecase.TarefasUseCase
 import projetos.danilo.mytasks.model.Tarefa
 
 class TarefasViewModel : ViewModel() {
@@ -39,5 +39,9 @@ class TarefasViewModel : ViewModel() {
 
     fun deletarTarefa(id: String){
         tarefasUseCase.deleteTarefa(id)
+    }
+
+    fun alterarConclusao(id: String, concluida: String){
+        tarefasUseCase.alterarConclusaoTarefa(id, concluida)
     }
 }

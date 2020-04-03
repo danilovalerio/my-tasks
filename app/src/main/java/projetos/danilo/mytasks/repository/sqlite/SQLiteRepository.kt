@@ -132,6 +132,28 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         db.close()
     }
 
+    fun alterarConclusaoTarefa(id:String, concluida: String){
+        var alteraConcluida = "0"
+
+        if(concluida == "0"){
+            alteraConcluida = "1"
+        } else {
+            alteraConcluida = "0"
+        }
+        val db = helper.writableDatabase
+        val cv = ContentValues().apply {
+            put(COLUMN_CONCLUIDA, alteraConcluida)
+        }
+
+        db.insertWithOnConflict(
+            TABLE_TAREFA,
+            null,
+            cv,
+            SQLiteDatabase.CONFLICT_REPLACE)
+
+        db.close()
+    }
+
     private fun tarefaFromCursor(cursor: Cursor): Tarefa {
         val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
         val titulo = cursor.getString(cursor.getColumnIndex(COLUMN_TITULO))

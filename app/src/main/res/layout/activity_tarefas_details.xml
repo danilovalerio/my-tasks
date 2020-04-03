@@ -54,14 +54,38 @@
                 android:textSize="18sp"
                 tools:text="Comentário da nota bla bla bla bla bla" />
 
-            <ImageView
-                android:id="@+id/imgbtn_excluir"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="18dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_delete"
-                android:background="@color/transparent"/>
+                android:gravity="center">
+
+                <CheckBox
+                    android:id="@+id/checkBoxConcluida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:textStyle="bold"
+                    android:text="@string/texto_switch_concluida"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_tituloTarefa"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="160dp"
+                    tools:layout_editor_absoluteY="50dp"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:id="@+id/imgbtn_excluir"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_delete"
+                    android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

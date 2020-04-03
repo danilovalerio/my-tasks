@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_tarefas.*
 import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
+import kotlinx.android.synthetic.main.item_tarefa.*
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity
@@ -21,6 +22,7 @@ import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.
 import projetos.danilo.mytasks.ui.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_TITULO
 import projetos.danilo.mytasks.ui.base.BaseActivity
 import projetos.danilo.mytasks.ui.detalhes.TarefasDetalhesActivity
+import projetos.danilo.mytasks.util.toastShort
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     private val viewModel by lazy {
@@ -61,7 +63,8 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
                                 tarefa.id,
                                 tarefa.titulo,
                                 tarefa.descricao,
-                                tarefa.comentario ?: " - "
+                                tarefa.comentario ?: " - ",
+                                tarefa.concluida.toString()
                             )
 
                             this@TarefasActivity.startActivity(intent)

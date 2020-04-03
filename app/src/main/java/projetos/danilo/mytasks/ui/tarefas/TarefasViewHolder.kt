@@ -23,7 +23,6 @@ class TarefasViewHolder(
             concluida.isChecked = true
         }
 
-
         itemView.setOnClickListener {
             onItemClickListener.invoke(tarefa)
         }
