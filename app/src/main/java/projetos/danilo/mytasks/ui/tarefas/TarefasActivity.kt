@@ -41,7 +41,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     lateinit var viewModelFactory: TarefasViewModelFactory
     lateinit var linearLayoutTarefa: LinearLayout
 
-
 //    private val viewModel by lazy {
 //        providerTarefasViewModel(
 //            this
@@ -242,6 +241,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         val data = Intent()
         data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.id,tarefa.titulo, tarefa.descricao,
         tarefa.comentario, tarefa.concluida))
+        setResult(Activity.RESULT_OK, data)
         this.finish()
     }
 

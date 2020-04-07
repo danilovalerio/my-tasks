@@ -23,7 +23,6 @@ fun providersTarefasRepository(armazenamento: GerenciadorTarefaRepository): Tare
 
 fun providerTarefasUseCase(context: Context): TarefasUseCase {
     val database = GerenciadorSQLiteRepository(context)
-    database.getAllTarefas()
 
     return TarefasUseCase(
         providersTarefasRepository(database)

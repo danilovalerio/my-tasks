@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import projetos.danilo.mytasks.model.ListaTarefa
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.persistencia.GerenciadorTarefaRepository
 import projetos.danilo.mytasks.repository.*
@@ -17,7 +18,6 @@ class GerenciadorSQLiteRepository :
     constructor(ctx: Context){
         helper = TarefaSqlHelper(ctx)
     }
-
 
     var notasMutableList: MutableList<Tarefa> = mutableListOf()
     lateinit var notaLiveData: MutableLiveData<Tarefa>
@@ -57,11 +57,7 @@ class GerenciadorSQLiteRepository :
         db.close()
     }
 
-    override var database: GerenciadorSQLiteRepository
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override fun <T> get(chave: String?, clazz: Class<T>?): T {
+    override fun <T> get(clazz: Class<T>?): T {
         TODO("Not yet implemented")
     }
 
@@ -73,7 +69,7 @@ class GerenciadorSQLiteRepository :
         TODO("Not yet implemented")
     }
 
-    override fun <T> getLista(chave: String?, clazz: Class<Array<T>?>?): List<T>? {
+    override fun <T> getLista(clazz: Class<Array<T>?>?): List<Tarefa>? {
         TODO("Not yet implemented")
     }
 
@@ -145,8 +141,11 @@ class GerenciadorSQLiteRepository :
         return notasMutableList
     }
 
-    fun getAllTarefas() {
-        if(notasMutableList.size > 0) notasMutableList.clear()
+    override fun getAllTarefas(): MutableList<Tarefa> {
+
+        var listaTarefa: MutableList<Tarefa> = mutableListOf()
+//        if(notasMutableList.size > 0) notasMutableList.clear()
+//        if(listaTarefa. > 0) notasMutableList.clear()
 
         val sql = "SELECT * FROM $TABLE_TAREFA"
         val db = helper.readableDatabase
@@ -155,13 +154,13 @@ class GerenciadorSQLiteRepository :
 
         while (cursor.moveToNext()){
             val tarefa = tarefaFromCursor(cursor)
-            notasMutableList.add(tarefa)
+            listaTarefa.add(tarefa)
         }
 
         cursor.close()
         db.close()
 
-//        return notasMutableList
+        return listaTarefa
     }
 
     fun excluirTarefa(id: String){

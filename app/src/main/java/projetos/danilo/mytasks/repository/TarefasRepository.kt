@@ -13,16 +13,13 @@ class TarefasRepository(
 ) {
     private var tarefasLista: MutableList<Tarefa> = ArrayList()
 
-    suspend fun consultarTarefasSQLite(): MutableList<Tarefa> {
-        if(tarefasLista.isEmpty()){
+    suspend fun consultarTarefas(): MutableList<Tarefa> {
+        if(tarefasLista.isNotEmpty()){
             return tarefasLista
         }
 
         withContext(Dispatchers.IO){
-            gerenciadorArmazenamento.get(CHAVE_TAREFAS, ListaTarefa::class.java)
-                ?.listaTarefa?.toMutableList()?.let {
-                    tarefasLista = it
-                }
+            tarefasLista = gerenciadorArmazenamento.getAllTarefas()
         }
         return tarefasLista
     }
@@ -42,7 +39,7 @@ class TarefasRepository(
     private suspend fun getAllTarefas(tarefasLista: MutableList<Tarefa>) {
         val listaTarefa = ListaTarefa(tarefasLista)
         withContext(Dispatchers.IO){
-            gerenciadorArmazenamento.database.getAllTarefas()
+//            gerenciadorArmazenamento.getAllTarefas()
         }
     }
 

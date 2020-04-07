@@ -1,7 +1,5 @@
 package projetos.danilo.mytasks.usecase
 
-import android.content.Context
-import projetos.danilo.mynotesmvvm.data.repository.sqlite.GerenciadorSQLiteRepository
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.repository.TarefasRepository
 import projetos.danilo.mytasks.util.verificaTexto
@@ -42,11 +40,11 @@ class TarefasUseCase(private val database: TarefasRepository) {
 
     /** Adicionar COUROTINES */
     suspend fun consultarLista(): MutableList<Tarefa> {
-        val listaTarefas = repository.consultarTarefasSQLite()
+        val listaTarefas = repository.consultarTarefas()
         if(listaTarefas.isNotEmpty()){
             return listaTarefas
         }
-        listaTarefas.addAll(repository.consultarTarefasSQLite())
+        listaTarefas.addAll(repository.consultarTarefas())
         return listaTarefas
         return mutableListOf()
     }
