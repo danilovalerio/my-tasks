@@ -8,6 +8,7 @@ import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.states.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.TarefasState
 import kotlinx.coroutines.launch
+import projetos.danilo.mytasks.viewmodel.states.TarefasInteractor
 
 class TarefasViewModel(private val useCase: TarefasUseCase) : BaseViewModel() {
     private val state: MutableLiveData<TarefasState> = MutableLiveData()
@@ -23,16 +24,61 @@ class TarefasViewModel(private val useCase: TarefasUseCase) : BaseViewModel() {
         }
     }
 
-    val tarefasUseCase = TarefasUseCase()
+    fun interpretar(interactor: TarefasInteractor){
+        when (interactor) {
+            is TarefasInteractor.ClickExcluirTarefa -> excluir(
+                interactor.tarefa,
+                interactor.position
+            )
+
+            is TarefasInteractor.ClickConfirmarExcluirTarefa -> confirmaExcluir(
+                interactor.tarefa,
+                interactor.position
+            )
+            is TarefasInteractor.ClickItem -> tarefaSelecionada(interactor.tarefa)
+            is TarefasInteractor.ClickNovaTarefa -> navegaAddTarefa()
+            is TarefasInteractor.ClickRecolherTarefas -> recolheLista()
+        }
+    }
+
+    private fun excluir(tarefa: Tarefa, position: Int){
+        launch {
+            useCase.deleteTarefa(position.toString()) //todo: Passar conta para exclusao
+        }
+    }
+
+    private fun confirmaExcluir(tarefa: Tarefa, position:Int){
+        event.value = TarefasEvent.ExibeTelaExclusao(tarefa, position)
+    }
+
+    private fun tarefaSelecionada(tarefa: Tarefa){
+        event.value = TarefasEvent.TarefaSelecionado(tarefa)
+    }
+
+    private fun navegaAddTarefa(){
+        launch {
+            event.value = TarefasEvent.NovaTarefa
+        }
+    }
+
+    private fun recolheLista(){
+        event.value = TarefasEvent.ListaRecolhida
+    }
+
+
+
+
+    //todo: Remover daqui para baixo os cod antigos
+    val tarefasUseCase = useCase
     val notasLiveData: MutableLiveData<List<Tarefa>> = MutableLiveData()
 
-    fun initDatabase(ctx: Context){
-        tarefasUseCase.initDatabase(ctx)
-    }
+//    fun initDatabase(ctx: Context){
+//        tarefasUseCase.initDatabase(ctx)
+//    }
 
     //Podemos usar couroutines para solicitar informação assíncrona (Async)
     fun getListaTarefas(){
-        setListaTarefas(tarefasUseCase.obterListaDeTarefas())
+//        setListaTarefas(tarefasUseCase.obterListaDeTarefas())
     }
 
     fun setListaTarefas(listaTarefas:List<Tarefa>){
@@ -45,11 +91,11 @@ class TarefasViewModel(private val useCase: TarefasUseCase) : BaseViewModel() {
     }
 
     fun buscaPorTiulo(termo: String){
-        if (termo.isNotEmpty()){
-            notasLiveData.value = tarefasUseCase.buscarTarefasPorTitulo(termo)
-        } else {
-            getListaTarefas()
-        }
+//        if (termo.isNotEmpty()){
+//            notasLiveData.value = tarefasUseCase.buscarTarefasPorTitulo(termo)
+//        } else {
+//            getListaTarefas()
+//        }
     }
 
     fun deletarTarefa(id: String){

@@ -7,10 +7,18 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.persistencia.GerenciadorTarefaRepository
 import projetos.danilo.mytasks.repository.*
 
-class SQLiteRepository(ctx: Context) : TarefaRepository {
-    private val helper = TarefaSqlHelper(ctx)
+class GerenciadorSQLiteRepository :
+    GerenciadorTarefaRepository {
+    private var helper: TarefaSqlHelper
+
+    constructor(ctx: Context){
+        helper = TarefaSqlHelper(ctx)
+    }
+
+
     var notasMutableList: MutableList<Tarefa> = mutableListOf()
     lateinit var notaLiveData: MutableLiveData<Tarefa>
     lateinit var notasLiveData: MutableLiveData<List<Tarefa>>
@@ -47,6 +55,38 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
             cv,
             SQLiteDatabase.CONFLICT_REPLACE)
         db.close()
+    }
+
+    override var database: GerenciadorSQLiteRepository
+        get() = TODO("Not yet implemented")
+        set(value) {}
+
+    override fun <T> get(chave: String?, clazz: Class<T>?): T {
+        TODO("Not yet implemented")
+    }
+
+    override fun <T> put(chave: String?, valor: T) {
+        TODO("Not yet implemented")
+    }
+
+    override fun <T> setLista(chave: String?, lista: Array<T>?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun <T> getLista(chave: String?, clazz: Class<Array<T>?>?): List<T>? {
+        TODO("Not yet implemented")
+    }
+
+    override fun contemValorParaChave(chave: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun deletar(chave: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun limpar() {
+        TODO("Not yet implemented")
     }
 
     override fun save(tarefa: Tarefa) {
@@ -105,7 +145,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         return notasMutableList
     }
 
-    fun getAllTarefas(): MutableList<Tarefa> {
+    fun getAllTarefas() {
         if(notasMutableList.size > 0) notasMutableList.clear()
 
         val sql = "SELECT * FROM $TABLE_TAREFA"
@@ -121,7 +161,7 @@ class SQLiteRepository(ctx: Context) : TarefaRepository {
         cursor.close()
         db.close()
 
-        return notasMutableList
+//        return notasMutableList
     }
 
     fun excluirTarefa(id: String){

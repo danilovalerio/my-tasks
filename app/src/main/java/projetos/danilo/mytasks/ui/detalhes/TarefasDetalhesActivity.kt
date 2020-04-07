@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.ui.base.BaseActivity
-import projetos.danilo.mytasks.ui.tarefas.providerTarefasViewModel
+import projetos.danilo.mytasks.provider.providerTarefasViewModel
 import projetos.danilo.mytasks.util.toastLong
 import projetos.danilo.mytasks.util.toastShort
 
@@ -24,7 +24,7 @@ class TarefasDetalhesActivity : BaseActivity() {
         setContentView(R.layout.activity_tarefas_details)
 
         configurarToolbar(toolbarPrincipal, R.string.titulo_detalhe_tarefas, true)
-        viewModelTarefas.initDatabase(this)
+//        viewModelTarefas.initDatabase(this)
 
         /**valores que vem da intent*/
         tv_notaDetalheTitulo.text = intent.getStringExtra(EXTRA_TITULO)

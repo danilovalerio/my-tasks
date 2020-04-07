@@ -1,20 +1,21 @@
 package projetos.danilo.mytasks.usecase
 
 import android.content.Context
-import projetos.danilo.mynotesmvvm.data.repository.sqlite.SQLiteRepository
+import projetos.danilo.mynotesmvvm.data.repository.sqlite.GerenciadorSQLiteRepository
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.repository.TarefasRepository
 import projetos.danilo.mytasks.util.verificaTexto
 
-class TarefasUseCase(private val repository: TarefasRepository) {
-    lateinit var database: SQLiteRepository
+class TarefasUseCase(private val database: TarefasRepository) {
+//    lateinit var database: SQLiteRepository
+    var repository = database
+//
+//    fun initDatabase(ctx: Context){
+//        database = SQLiteRepository(ctx)
+//    }
 
-    fun initDatabase(ctx: Context){
-        database = SQLiteRepository(ctx)
-    }
-
-    fun obterListaDeTarefas() : List<Tarefa> {
-        return database.getAllTarefas()
+    fun obterListaDeTarefas()  {
+//        return database.getAllTarefas()
     }
 
     fun adicionarTarefa(tarefa: Tarefa) {
@@ -24,19 +25,19 @@ class TarefasUseCase(private val repository: TarefasRepository) {
             tarefa.comentario?.let { verificaTexto(it) },
             null)
 
-        database.save(tarefaValidada)
+//        database.save(tarefaValidada)
     }
 
-    fun buscarTarefasPorTitulo(termo: String) : List<Tarefa>{
-        return database.search(termo)
+    fun buscarTarefasPorTitulo(termo: String) {
+//        return database.search(termo)
     }
 
     fun deleteTarefa(id: String){
-        database.excluirTarefa(id)
+//        database.excluirTarefa(id)
     }
 
     fun alterarConclusaoTarefa(id: String, concluida: String) {
-        database.alterarConclusaoTarefa(id, concluida)
+//        database.alterarConclusaoTarefa(id, concluida)
     }
 
     /** Adicionar COUROTINES */
@@ -47,6 +48,7 @@ class TarefasUseCase(private val repository: TarefasRepository) {
         }
         listaTarefas.addAll(repository.consultarTarefasSQLite())
         return listaTarefas
+        return mutableListOf()
     }
 
     suspend fun salvarContaSQLite(): Boolean {
@@ -67,7 +69,7 @@ class TarefasUseCase(private val repository: TarefasRepository) {
                     null
                 )
             )
-            repository.salvarTarefaSQLite(listaTarefa)
+//            repository.salvarTarefaSQLite(listaTarefa)
             return true
         }
         return false

@@ -1,15 +1,17 @@
-package projetos.danilo.mytasks.ui.tarefas
+package projetos.danilo.mytasks.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 
 
 class TarefasAdapter(
-    val tarefas: List<Tarefa>,
-    val onItemClickListener: (tarefa: Tarefa) -> Unit
+    val tarefas: MutableList<Tarefa>,
+    val viewModel: TarefasViewModel
+//    val onItemClickListener: (tarefa: Tarefa) -> Unit
 ) /**lâmbda ao inves da interface*/
     : RecyclerView.Adapter<TarefasViewHolder>() {
 
@@ -18,10 +20,7 @@ class TarefasAdapter(
         viewType: Int
     ): TarefasViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_tarefa, parent, false)
-        return TarefasViewHolder(
-            itemView,
-            onItemClickListener
-        )
+        return TarefasViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
@@ -29,7 +28,8 @@ class TarefasAdapter(
     }
 
     override fun onBindViewHolder(holder: TarefasViewHolder, position: Int) {
-        holder.bindView(tarefas[position])
+        holder.bindView(tarefas[position], viewModel, position)
+//        holder.bindView(tarefas[position])
     }
 
 }

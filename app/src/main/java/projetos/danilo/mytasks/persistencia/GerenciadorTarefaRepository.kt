@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import projetos.danilo.mynotesmvvm.data.repository.sqlite.GerenciadorSQLiteRepository
 import projetos.danilo.mytasks.model.Tarefa
 
-interface GerenciadorArmazenamento {
-    var database: GerenciadorSQLiteRepository
+/** Similar ao GerenciadorArmazenamento em persistencia */
+interface GerenciadorTarefaRepository {
+//    var database: GerenciadorSQLiteRepository
 
     operator fun <T> get(chave: String?, clazz: Class<T>?): T
 
@@ -28,4 +29,5 @@ interface GerenciadorArmazenamento {
     fun remove(vararg tarefas: Tarefa)
     fun tarefaById(id: Long) : LiveData<Tarefa>
     fun search(term: String): MutableList<Tarefa>
+
 }

@@ -8,6 +8,6 @@ import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 class TarefasViewModelFactory(private val useCase: TarefasUseCase):
 ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        TarefasViewModel(useCase) as T
+        return TarefasViewModel(useCase) as T
     }
 }
