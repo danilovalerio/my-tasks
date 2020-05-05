@@ -2,6 +2,9 @@
     <string name="app_name">My Tasks</string>
     <string name="titulo_minhas_tarefas">Minhas Tarefas</string>
 
+
+    <string name="teste_view_model">Clicou %d vezes teste view model </string>
+
     <!--  TarefasDetalhesActivity  -->
     <string name="titulo_tarefa">Tarefa</string>
     <string name="titulo_observacoes">Observações:</string>
@@ -26,5 +29,6 @@
     <string name="hint_titulo_tarefa">Titulo</string>
     <string name="hint_descricao">Descricão</string>
     <string name="hint_comentario">Comentário...</string>
+    <string name="texto_titulo_adicionar_tarefa">Adicionar tarefa</string>
 
 </resources>

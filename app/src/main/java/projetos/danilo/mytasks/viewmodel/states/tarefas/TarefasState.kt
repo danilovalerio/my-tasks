@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.viewmodel.states
+package projetos.danilo.mytasks.viewmodel.states.tarefas
 
 import projetos.danilo.mytasks.model.Tarefa
 

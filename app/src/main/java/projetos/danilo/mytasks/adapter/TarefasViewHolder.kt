@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_tarefa.view.*
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
-import projetos.danilo.mytasks.viewmodel.states.TarefasInteractor
+import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 
 class TarefasViewHolder(

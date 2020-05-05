@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.ui.base
+package projetos.danilo.mytasks.activity.base
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar

@@ -1,14 +1,10 @@
-package projetos.danilo.mytasks.persistencia
+package projetos.danilo.mytasks.data
 
 import androidx.lifecycle.LiveData
-import projetos.danilo.mynotesmvvm.data.repository.sqlite.GerenciadorSQLiteRepository
-import projetos.danilo.mytasks.model.ListaTarefa
 import projetos.danilo.mytasks.model.Tarefa
 
 /** Similar ao GerenciadorArmazenamento em persistencia */
 interface GerenciadorTarefaRepository {
-//    var database: GerenciadorSQLiteRepository
-
     operator fun <T> get(clazz: Class<T>?): T
 
     fun <T> put(chave: String?, valor: T)

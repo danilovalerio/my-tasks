@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.ui.detalhes
+package projetos.danilo.mytasks.activity.detalhes
 
 import android.content.Context
 import android.content.Intent
@@ -6,18 +6,17 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
 import projetos.danilo.mytasks.R
-import projetos.danilo.mytasks.ui.base.BaseActivity
-import projetos.danilo.mytasks.provider.providerTarefasViewModel
+import projetos.danilo.mytasks.activity.base.BaseActivity
 import projetos.danilo.mytasks.util.toastLong
 import projetos.danilo.mytasks.util.toastShort
 
 class TarefasDetalhesActivity : BaseActivity() {
-
-    private val viewModelTarefas by lazy {
-        providerTarefasViewModel(
-            this
-        )
-    }
+//
+//    private val viewModelTarefas by lazy {
+//        providerTarefasViewModel(
+//            this
+//        )
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,7 @@ class TarefasDetalhesActivity : BaseActivity() {
         imgbtn_excluir.setOnClickListener {
             val idParaExclusao = intent.getStringExtra(EXTRA_ID)
             val tituloNotaExcluida = intent.getStringExtra(EXTRA_TITULO)
-            viewModelTarefas.deletarTarefa(idParaExclusao)
+//            viewModelTarefas.deletarTarefa(idParaExclusao)
             toastLong("Tarefa $tituloNotaExcluida excluída com sucesso!")
             finish()
         }
@@ -43,7 +42,7 @@ class TarefasDetalhesActivity : BaseActivity() {
             val idParaAtualizar = intent.getStringExtra(EXTRA_ID)
             val conclusao = intent.getStringExtra(EXTRA_CONCLUSAO)
             toastShort("Clicou")
-            viewModelTarefas.alterarConclusao(idParaAtualizar, conclusao)
+//            viewModelTarefas.alterarConclusao(idParaAtualizar, conclusao)
         }
     }
 

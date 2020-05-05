@@ -1,23 +1,6 @@
-package projetos.danilo.mytasks.ui.tarefas
+package projetos.danilo.mytasks.activity.tarefas
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.accessibility.AccessibilityEvent
-import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import projetos.danilo.mytasks.R
-import projetos.danilo.mytasks.adapter.TarefasAdapter
-import projetos.danilo.mytasks.usecase.TarefasUseCase
-import projetos.danilo.mytasks.viewmodel.TarefasViewModel
-import projetos.danilo.mytasks.viewmodel.factory.TarefasViewModelFactory
-import projetos.danilo.mytasks.viewmodel.states.TarefasInteractor
 
 class TarefasFragment : Fragment() {
 

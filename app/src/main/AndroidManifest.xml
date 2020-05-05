@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.tarefas.TarefasActivity">
+        <activity android:name=".activity.TarefasActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,11 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.addTarefas.AdicionarTarefasActivity"
-            android:parentActivityName=".ui.tarefas.TarefasActivity" />
+            android:name=".activity.addTarefas.AdicionarTarefasActivity"
+            android:parentActivityName=".activity.TarefasActivity" />
         <activity
-            android:name=".ui.detalhes.TarefasDetalhesActivity"
-            android:parentActivityName=".ui.tarefas.TarefasActivity" />
+            android:name=".activity.detalhes.TarefasDetalhesActivity"
+            android:parentActivityName=".activity.TarefasActivity" />
     </application>
 
 </manifest>

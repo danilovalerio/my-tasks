@@ -6,9 +6,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import projetos.danilo.mytasks.model.ListaTarefa
 import projetos.danilo.mytasks.model.Tarefa
-import projetos.danilo.mytasks.persistencia.GerenciadorTarefaRepository
+import projetos.danilo.mytasks.data.GerenciadorTarefaRepository
 import projetos.danilo.mytasks.repository.*
 
 class GerenciadorSQLiteRepository :

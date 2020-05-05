@@ -4,19 +4,43 @@ import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.repository.TarefasRepository
 import projetos.danilo.mytasks.util.verificaTexto
 
-class TarefasUseCase(private val database: TarefasRepository) {
-//    lateinit var database: SQLiteRepository
-    var repository = database
-//
-//    fun initDatabase(ctx: Context){
-//        database = SQLiteRepository(ctx)
-//    }
+class TarefasUseCase(private val repository: TarefasRepository) {
+
+    /** Adicionar COUROTINES */
+    /*Consulta a lista do banco*/
+    suspend fun consultarLista(): MutableList<Tarefa> {
+        val listaTarefas = repository.consultarTarefas()
+        if(listaTarefas.isNotEmpty()){
+            return listaTarefas
+        }
+        listaTarefas.addAll(repository.consultarTarefas())
+        return listaTarefas
+        return mutableListOf()
+    }
+
+    //todo: ADICIONAR TAREFA
+    suspend fun adicionarTarefa(tarefa: Tarefa): MutableList<Tarefa> {
+
+        val tarefaValidada = Tarefa(0,
+            verificaTexto(tarefa.titulo),
+            verificaTexto(tarefa.descricao),
+            tarefa.comentario?.let { verificaTexto(it) },
+            null)
+
+        repository.salvarTarefa(tarefaValidada)
+
+        val listaAtualizada = repository.consultarTarefas()
+
+        return listaAtualizada
+    }
+
+
 
     fun obterListaDeTarefas()  {
 //        return database.getAllTarefas()
     }
 
-    fun adicionarTarefa(tarefa: Tarefa) {
+    fun adicionarTarefaOld(tarefa: Tarefa) {
         val tarefaValidada = Tarefa(0,
             verificaTexto(tarefa.titulo),
             verificaTexto(tarefa.descricao),
@@ -38,18 +62,11 @@ class TarefasUseCase(private val database: TarefasRepository) {
 //        database.alterarConclusaoTarefa(id, concluida)
     }
 
-    /** Adicionar COUROTINES */
-    suspend fun consultarLista(): MutableList<Tarefa> {
-        val listaTarefas = repository.consultarTarefas()
-        if(listaTarefas.isNotEmpty()){
-            return listaTarefas
-        }
-        listaTarefas.addAll(repository.consultarTarefas())
-        return listaTarefas
-        return mutableListOf()
-    }
 
-    suspend fun salvarContaSQLite(): Boolean {
+
+
+
+    suspend fun salvarTarefaSQLite(): Boolean {
         val listaTarefa = consultarLista()
         var tarefa: Tarefa? = null
 
@@ -67,7 +84,7 @@ class TarefasUseCase(private val database: TarefasRepository) {
                     null
                 )
             )
-//            repository.salvarTarefaSQLite(listaTarefa)
+            repository.salvarTarefaSQLite(listaTarefa)
             return true
         }
         return false
