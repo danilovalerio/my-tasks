@@ -31,12 +31,12 @@ import projetos.danilo.mytasks.data.RepositoryImpl
 import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
 import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
+import projetos.danilo.mytasks.viewmodel.factory.TarefasViewModelFactory
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    private lateinit var viewModelOld: TarefasViewModel
     private lateinit var recyclerViewTarefas: RecyclerView
     private lateinit var adapterTarefas: TarefasAdapter
 
@@ -44,13 +44,13 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     private var buscaView: SearchView? = null
 
     val ACTIVITY_ADICIONAR_NOTA_REQUEST = 1
-    val CHAR_DEFAULT = "-"
     val ZERO_DEFAULT:Long = 0
 
 
     //utilizar injecao de dependencia
     private val cacheService by lazy { TarefasCacheServiceImpl() }
     private val repository by lazy { RepositoryImpl(cacheService) }
+    /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
     private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         iniciarViewModel()
         inicializarObservers()
 
-        viewModel.inicializar(this)
     }
 
     private fun configurarBind(){
@@ -73,7 +72,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun iniciarViewModel(){
-//        viewModelOld = ViewModelProviders.of(this).get(TarefasViewModel::class.java)
+        viewModel.inicializar(this)
     }
 
     fun inicializarObservers(){
@@ -81,7 +80,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
             Log.i("DADOS", it.toString())
 //            successCall(it as MutableList<Tarefa>)
         })
-
 
         viewModel.viewEvent.observe(this, Observer { viewstate ->
             viewstate?.let {
@@ -111,17 +109,12 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)
     }
 
-    private fun recolheLista(){
-        this.finish()
-    }
-
     private fun vaiParaAdicionarTarefa(){
         val intent = Intent(this, AdicionarTarefasActivity::class.java)
         startActivity(intent)
     }
 
     private fun navegarParaTalhes(tarefa: Tarefa){
-
             val intent = TarefasDetalhesActivity.getStartIntent(
                 this@TarefasActivity,
                 tarefa.id,
@@ -130,7 +123,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
                 tarefa.comentario ?: " - ",
                 tarefa.concluida.toString()
             )
-
             this@TarefasActivity.startActivity(intent)
     }
 
@@ -220,7 +212,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
         when(item.itemId){
             R.id.action_ocultar -> {
-                aoClicarItemMenu()
+//                aoClicarItemMenu()
             }
 //            R.id.action_nova -> {
 //                val intent = Intent(this, AdicionarTarefasActivity::class.java)
@@ -254,14 +246,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         Log.i("TEXTO_PROCURADO", "TEXTO LIMPO"+ultimoTermoProcurado)
         viewModel.buscaPorTiulo(ultimoTermoProcurado)
         return true
-    }
-
-    private fun aoClicarItemMenu(): View.OnClickListener{
-        toastShort("RECOLHER TAREFAS")
-        return View.OnClickListener {
-
-            recolheLista()
-        }
     }
 
     private fun successCall(tarefas: MutableList<Tarefa>){
