@@ -1,6 +1,7 @@
 package projetos.danilo.mytasks.adapter
 
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_tarefa.view.*
 import projetos.danilo.mytasks.model.Tarefa

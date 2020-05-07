@@ -21,7 +21,7 @@
             android:name=".activity.addTarefas.AdicionarTarefasActivity"
             android:parentActivityName=".activity.TarefasActivity" />
         <activity
-            android:name=".activity.detalhes.TarefasDetalhesActivity"
+            android:name=".activity.TarefasDetalhesActivity"
             android:parentActivityName=".activity.TarefasActivity" />
     </application>
 

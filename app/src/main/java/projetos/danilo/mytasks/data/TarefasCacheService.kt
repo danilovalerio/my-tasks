@@ -41,6 +41,6 @@ class TarefasCacheServiceImpl : TarefaCacheService {
         )
         val tarefa8: Tarefa = Tarefa(10, "Cache 8", "Minha tarefa exemplo", null, 0)
 
-        return listOf(tarefa1, tarefa2, tarefa3, tarefa4, tarefa5, tarefa6, tarefa7, tarefa8)
+        return listOf(tarefa1, tarefa2)
     }
 }

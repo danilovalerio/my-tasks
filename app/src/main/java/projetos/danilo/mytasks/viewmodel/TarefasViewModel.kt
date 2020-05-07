@@ -1,19 +1,14 @@
 package projetos.danilo.mytasks.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
-import projetos.danilo.mytasks.usecase.TarefasUseCase
+import kotlinx.coroutines.launch
+import projetos.danilo.mytasks.data.Repository
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
-import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
-import kotlinx.coroutines.launch
-import projetos.danilo.mynotesmvvm.data.repository.sqlite.GerenciadorSQLiteRepository
-import projetos.danilo.mytasks.model.ListaTarefa
-import projetos.danilo.mytasks.data.Repository
-import projetos.danilo.mytasks.provider.providerTarefasUseCase
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
+import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
 class TarefasViewModel(private val repository: Repository) : ViewModel() {
     private val state: MutableLiveData<TarefasState> = MutableLiveData()
@@ -22,46 +17,58 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
     val viewState: LiveData<TarefasState> = state
     val viewEvent: LiveData<TarefasEvent> = event
 
-    val tarefas = MutableLiveData<List<Tarefa>>()
+    var tarefas = MutableLiveData<MutableList<Tarefa>>()
 
-    private lateinit var gerenciadorSQLiteRepository: GerenciadorSQLiteRepository
+    var tarefasMut: MutableList<Tarefa> = mutableListOf()
 
-    fun inicializar(context: Context){
-//        useCase = providerTarefasUseCase(context)
-
+    fun inicializar() {
         viewModelScope.launch {
-            event.postValue(TarefasEvent.SuccessGetAll(repository.getListTarefa() as MutableList<Tarefa>))
-//            state.postValue(TarefasState.ListaTarefas(useCase.consultarLista()))
-//            event.postValue(TarefasEvent.SuccessGetAll(useCase.consultarLista()))
-            tarefas.value = repository.getListTarefa()
+            state.postValue(TarefasState.ListaTarefas(repository.getListTarefa() as MutableList<Tarefa>))
+            tarefasMut.addAll(repository.getListTarefa() as MutableList<Tarefa>) //todo: teste, remover posteriormente
         }
     }
 
-    fun interpretar(interactor: TarefasInteractor){
-        Log.i("InteractorViewModel: ",interactor.toString())
+    /** Interpretar as ações do usuário como cliques e também são mapeados por sealed class */
+    fun interpretar(interactor: TarefasInteractor) {
+        Log.i("InteractorViewModel: ", interactor.toString())
         when (interactor) {
-//            is TarefasInteractor.ClickNovaTarefa -> abreTelaAdicionarTarefa()
-            is TarefasInteractor.AdicionarTarefa -> adicionarTarefa(interactor.tarefa)
+            is TarefasInteractor.ClickNovaTarefa -> navegaTelaAdicionarTarefa()
+            is TarefasInteractor.ExibeMensagemToastCurta -> exibirMensagem(interactor.msg)
+
+            is TarefasInteractor.ClickItem -> tarefaClicada(interactor.tarefa)
+//            is TarefasInteractor.AdicionarTarefa -> adicionarTarefa(interactor.tarefa)
         }
     }
 
-//    private fun abreTelaAdicionarTarefa(){
-//        event.value = TarefasEvent.NovaTarefa //ativa evento que leva para tela de adicionar tarefa
-//    }
-
-    private fun adicionarTarefa(tarefa: Tarefa){
-        GlobalScope.launch {
-//            useCase.adicionarTarefa(tarefa)
+    private fun navegaTelaAdicionarTarefa() {
+        viewModelScope.launch {
+            event.value = TarefasEvent.NovaTarefa
         }
     }
 
-    private fun excluir(tarefa: Tarefa, position: Int){
+    fun adicionarTarefa(tarefa: Tarefa) {
+        tarefasMut.add(tarefa)
+        tarefas.postValue(tarefasMut)
+        state.postValue(TarefasState.ListaTarefas(tarefasMut))
+    }
+
+    private fun exibirMensagem(msg: String) {
+        viewModelScope.launch {
+            event.value = TarefasEvent.ExibeMensagemCurta(msg)
+        }
+    }
+
+    private fun tarefaClicada(tarefa: Tarefa) {
+        event.value = TarefasEvent.ClickTarefa(tarefa)
+    }
+
+    private fun excluir(tarefa: Tarefa, position: Int) {
         GlobalScope.launch {
 //            useCase.deleteTarefa(position.toString()) //todo: Passar conta para exclusao
         }
     }
 
-//    private fun confirmaExcluir(tarefa: Tarefa, position:Int){
+    //    private fun confirmaExcluir(tarefa: Tarefa, position:Int){
 //        event.value = TarefasEvent.ExibeTelaExclusao(tarefa, position)
 //    }
 //
@@ -69,21 +76,7 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
 //        event.value = TarefasEvent.TarefaSelecionado(tarefa)
 //    }
 //
-//    private fun recolheLista(){
-//        event.value = TarefasEvent.ListaRecolhida
-//    }
-//
-//    //todo: WIP
-//    private fun salvarTarefa(tarefa: Tarefa){
-//        event.value = TarefasEvent.AdicionarTarefa(tarefa)
-//        GlobalScope.launch {
-////            useCase.adicionarTarefa(tarefa)
-////            state.postValue(TarefasState.ListaTarefas(useCase.consultarLista()))
-//        }
-//
-//    }
-
-    fun buscaPorTiulo(termo: String){
+    fun buscaPorTiulo(termo: String) {
 //        if (termo.isNotEmpty()){
 //            notasLiveData.value = tarefasUseCase.buscarTarefasPorTitulo(termo)
 //        } else {

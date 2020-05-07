@@ -5,6 +5,9 @@
 
     <string name="teste_view_model">Clicou %d vezes teste view model </string>
 
+
+    <string name="texto_tarefa_adicionada_com_sucesso">%1$s adiciona com sucesso!</string>
+
     <!--  TarefasDetalhesActivity  -->
     <string name="titulo_tarefa">Tarefa</string>
     <string name="titulo_observacoes">Observações:</string>

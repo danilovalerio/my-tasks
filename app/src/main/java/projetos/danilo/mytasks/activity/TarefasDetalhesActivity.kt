@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.activity.detalhes
+package projetos.danilo.mytasks.activity
 
 import android.content.Context
 import android.content.Intent

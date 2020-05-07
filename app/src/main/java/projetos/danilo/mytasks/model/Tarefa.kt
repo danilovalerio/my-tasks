@@ -9,13 +9,13 @@ data class Tarefa (
     @SerializedName("id")
     var id: Long,
     @SerializedName("titulo")
-    val titulo: String,
+    var titulo: String,
     @SerializedName("descricao")
-    val descricao: String,
+    var descricao: String,
     @SerializedName("comentario")
-    val comentario: String? = "-",
+    var comentario: String? = "-",
     @SerializedName("concluida")
-    val concluida: Int? = 0//0 false 1 true
+    var concluida: Int? = 0//0 false 1 true
 ) : Parcelable {
     constructor(parcel: Parcel) : this (
         parcel.readLong(),

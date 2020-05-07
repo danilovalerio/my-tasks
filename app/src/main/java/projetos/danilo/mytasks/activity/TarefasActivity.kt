@@ -8,11 +8,9 @@ import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -21,21 +19,21 @@ import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.adapter.TarefasAdapter
 import projetos.danilo.mytasks.model.Tarefa
-import projetos.danilo.mytasks.activity.addTarefas.AdicionarTarefasActivity
-import projetos.danilo.mytasks.activity.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_COMENTARIO
-import projetos.danilo.mytasks.activity.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_DESCRICAO
-import projetos.danilo.mytasks.activity.addTarefas.AdicionarTarefasActivity.Companion.EXTRA_TITULO
 import projetos.danilo.mytasks.activity.base.BaseActivity
-import projetos.danilo.mytasks.activity.detalhes.TarefasDetalhesActivity
 import projetos.danilo.mytasks.data.RepositoryImpl
 import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
 import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
-import projetos.danilo.mytasks.viewmodel.factory.TarefasViewModelFactory
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
+import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+    //utilizar injecao de dependencia
+    private val cacheService by lazy { TarefasCacheServiceImpl() }
+    private val repository by lazy { RepositoryImpl(cacheService) }
+    /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
+    private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
     private lateinit var recyclerViewTarefas: RecyclerView
     private lateinit var adapterTarefas: TarefasAdapter
@@ -45,13 +43,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
     val ACTIVITY_ADICIONAR_NOTA_REQUEST = 1
     val ZERO_DEFAULT:Long = 0
-
-
-    //utilizar injecao de dependencia
-    private val cacheService by lazy { TarefasCacheServiceImpl() }
-    private val repository by lazy { RepositoryImpl(cacheService) }
-    /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
-    private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,34 +59,37 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         recyclerViewTarefas = findViewById(R.id.recyclerTarefas)
         configurarToolbar(toolbarPrincipal, R.string.titulo_minhas_tarefas)
 
-        floatingActionButton.setOnClickListener { abrirBottomSheetAdicionarTarefa() }
+        floatingActionButton.setOnClickListener {
+//            abrirBottomSheetAdicionarTarefa() //abrindo direto
+            viewModel.interpretar(TarefasInteractor.ClickNovaTarefa)
+        }
     }
 
     private fun iniciarViewModel(){
-        viewModel.inicializar(this)
+        viewModel.inicializar()
     }
 
     fun inicializarObservers(){
         viewModel.tarefas.observe(this, Observer {
-            Log.i("DADOS", it.toString())
+            Log.i("DADOS TAREFAS: ", it.toString())
 //            successCall(it as MutableList<Tarefa>)
-        })
-
-        viewModel.viewEvent.observe(this, Observer { viewstate ->
-            viewstate?.let {
-                when(it){
-                    is TarefasEvent.SuccessGetAll -> successCall(it.tarefas)
-                }
-            }
+            configuraAdapter(it)
         })
 
         viewModel.viewState.observe(this, Observer { viewstate ->
             viewstate?.let {
                 when(it){
-//                    is TarefasState.ListaTarefas -> {
-//                        Log.i("IteratorListaTarefas","preenche a lista"+it.listaTarefa.toString())
-//                        preencheLista(it.listaTarefa)
-//                    }
+                    is TarefasState.ListaTarefas -> successCall(it.listaTarefa)
+                }
+            }
+        })
+
+        viewModel.viewEvent.observe(this, Observer { viewstate ->
+            viewstate?.let {
+                when(it){
+                    is TarefasEvent.NovaTarefa -> abrirBottomSheetAdicionarTarefa()
+                    is TarefasEvent.ExibeMensagemCurta -> exibirMensagemCurta(it.msg)
+                    is TarefasEvent.ClickTarefa -> navegarParaTalhes(it.tarefa)
                 }
             }
         })
@@ -107,11 +101,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
     private fun abriBottomSheet(bottomSheet: BottomSheetDialogFragment){
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-    }
-
-    private fun vaiParaAdicionarTarefa(){
-        val intent = Intent(this, AdicionarTarefasActivity::class.java)
-        startActivity(intent)
     }
 
     private fun navegarParaTalhes(tarefa: Tarefa){
@@ -150,40 +139,27 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
             .show()
     }
 
-    private fun excluir(position: Int){
-        recyclerViewTarefas.adapter?.apply {
-            notifyItemRemoved(position)
-            notifyItemChanged(position, itemCount)
-        }
-        toolbarPrincipal.requestFocus()
+    private fun successCall(tarefas: MutableList<Tarefa>){
+        Log.i("DADOS", tarefas.toString())
+        configuraAdapter(tarefas)
     }
 
-    override fun finish() {
-        val semAnimacao = 0
-        super.finish()
-        overridePendingTransition(semAnimacao, R.anim.slide_up_tarefas)
+    private fun configuraAdapter(tarefas: MutableList<Tarefa>){
+        adapterTarefas = TarefasAdapter(tarefas, viewModel)
+
+        recyclerViewTarefas.layoutManager = LinearLayoutManager(this)
+        recyclerViewTarefas.setHasFixedSize(true)
+        recyclerViewTarefas.adapter = adapterTarefas
+
+        adapterTarefas.notifyDataSetChanged()
+
+        if(tarefas.size == 0) {
+            Log.i("MENSAGEM","NENHUMA TAREFA ENCONTRADA")
+        }
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ACTIVITY_ADICIONAR_NOTA_REQUEST){
-            if (resultCode == Activity.RESULT_OK){
-//                val resultado = data?.getStringExtra(EXTRA_TITULO) ?: "-"
-                val tarefaNova = Tarefa(ZERO_DEFAULT,
-                    data?.getStringExtra(EXTRA_TITULO) ?: "-",
-                    data?.getStringExtra(EXTRA_DESCRICAO) ?: "-",
-                    data?.getStringExtra(EXTRA_COMENTARIO) ?: "-" ,
-                    null)
-
-//                viewModel.adicionarTarefa(tarefaNova)
-            }
-        }
-
-        Log.i("TAREFAS_ACTIVITY", "onActivityResult")
-
-//        inicializarObservers()
+    private fun exibirMensagemCurta(msg: String){
+        toastShort(msg)
     }
 
     /** Configuração das opções na Action Bar */
@@ -246,24 +222,6 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         Log.i("TEXTO_PROCURADO", "TEXTO LIMPO"+ultimoTermoProcurado)
         viewModel.buscaPorTiulo(ultimoTermoProcurado)
         return true
-    }
-
-    private fun successCall(tarefas: MutableList<Tarefa>){
-        configuraAdapter(tarefas)
-    }
-
-    private fun configuraAdapter(tarefas: MutableList<Tarefa>){
-        adapterTarefas = TarefasAdapter(tarefas, viewModel)
-
-        recyclerViewTarefas.layoutManager = LinearLayoutManager(this)
-        recyclerViewTarefas.setHasFixedSize(true)
-        recyclerViewTarefas.adapter = adapterTarefas
-
-        adapterTarefas.notifyDataSetChanged()
-
-        if(tarefas.size == 0) {
-            Log.i("MENSAGEM","NENHUMA TAREFA ENCONTRADA")
-        }
     }
 
     companion object {
