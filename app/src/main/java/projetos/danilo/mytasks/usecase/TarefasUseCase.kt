@@ -21,7 +21,7 @@ class TarefasUseCase(private val repository: TarefasRepository) {
     //todo: ADICIONAR TAREFA
     suspend fun adicionarTarefa(tarefa: Tarefa): MutableList<Tarefa> {
 
-        val tarefaValidada = Tarefa(0,
+        val tarefaValidada = Tarefa(
             verificaTexto(tarefa.titulo),
             verificaTexto(tarefa.descricao),
             tarefa.comentario?.let { verificaTexto(it) },
@@ -41,7 +41,7 @@ class TarefasUseCase(private val repository: TarefasRepository) {
     }
 
     fun adicionarTarefaOld(tarefa: Tarefa) {
-        val tarefaValidada = Tarefa(0,
+        val tarefaValidada = Tarefa(
             verificaTexto(tarefa.titulo),
             verificaTexto(tarefa.descricao),
             tarefa.comentario?.let { verificaTexto(it) },
@@ -77,7 +77,6 @@ class TarefasUseCase(private val repository: TarefasRepository) {
         if(tarefa != null){
             tarefa ?: listaTarefa.add(
                 Tarefa(
-                    0.toLong(),
                     "textoTitulo",
                     "textoDescricao",
                     null,

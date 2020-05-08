@@ -17,5 +17,5 @@ data class TarefaResponse(
     val comentario: String? = "-",
     val concluida: Int? = 0//0 false 1 true
 ) {
-    fun toTarefa() = Tarefa(id, titulo, descricao, comentario, concluida)
+    fun toTarefa() = Tarefa(titulo, descricao, comentario, concluida)
 }

@@ -38,7 +38,7 @@ class AdicionarTarefasActivity : BaseActivity() {
 //            returnIntent.putExtra(EXTRA_COMENTARIO, et_comentarioTarefa.text.toString())
 //            setResult(Activity.RESULT_OK, returnIntent)
 
-            val tarefa = Tarefa(0,
+            val tarefa = Tarefa(
                 et_tituloTarefa.text.toString(),
                 et_descricaoTarefa.text.toString(),
                 et_comentarioTarefa.text.toString(),
@@ -57,7 +57,7 @@ class AdicionarTarefasActivity : BaseActivity() {
 
     private fun adicionar(tarefa: Tarefa){
         val data = Intent()
-        data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.id,tarefa.titulo, tarefa.descricao,
+        data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.titulo, tarefa.descricao,
             tarefa.comentario, tarefa.concluida))
         setResult(Activity.RESULT_OK, data)
     }

@@ -92,7 +92,7 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
     private fun adicionarTarefa() {
         val tarefa = viewModel.tarefaAtualizada.value as Tarefa
 
-        viewModelTarefas.adicionarTarefa(tarefa)
+        viewModelTarefas.adicionarTarefa(tarefa, this.requireContext())
         viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(resources.getString(R.string.texto_tarefa_adicionada_com_sucesso, tarefa.titulo)))
         this.dismiss()
     }

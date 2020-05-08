@@ -17,11 +17,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.activity_tarefas.*
 import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
 import projetos.danilo.mytasks.R
-import projetos.danilo.mytasks.adapter.TarefasAdapter
-import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.activity.base.BaseActivity
+import projetos.danilo.mytasks.adapter.TarefasAdapter
 import projetos.danilo.mytasks.data.RepositoryImpl
 import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
+import projetos.danilo.mytasks.data.db.TarefaDatabase
+import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
@@ -30,8 +31,9 @@ import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     //utilizar injecao de dependencia
+    private val tareafasdatabase by lazy { TarefaDatabase.invoke(baseContext) }
     private val cacheService by lazy { TarefasCacheServiceImpl() }
-    private val repository by lazy { RepositoryImpl(cacheService) }
+    private val repository by lazy { RepositoryImpl(cacheService, tareafasdatabase) }
     /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
     private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
@@ -49,6 +51,8 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         setContentView(R.layout.activity_tarefas)
 
         configurarBind()
+        //inicializa a instancia do banco de dados
+//        tarefasDatabase = TarefaDatabase.invoke(this)
 
         iniciarViewModel()
         inicializarObservers()
@@ -66,7 +70,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun iniciarViewModel(){
-        viewModel.inicializar()
+        viewModel.inicializar(this)
     }
 
     fun inicializarObservers(){
@@ -117,7 +121,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
     private fun tarefaSelecionada(tarefa: Tarefa){
         val data = Intent()
-        data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.id,tarefa.titulo, tarefa.descricao,
+        data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.titulo, tarefa.descricao,
         tarefa.comentario, tarefa.concluida))
         setResult(Activity.RESULT_OK, data)
     }

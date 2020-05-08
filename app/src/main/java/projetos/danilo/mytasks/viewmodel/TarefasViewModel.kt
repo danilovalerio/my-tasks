@@ -1,10 +1,14 @@
 package projetos.danilo.mytasks.viewmodel
 
+import android.app.Activity
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import projetos.danilo.mytasks.activity.TarefasActivity
 import projetos.danilo.mytasks.data.Repository
+import projetos.danilo.mytasks.data.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
@@ -21,7 +25,7 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
 
     var tarefasMut: MutableList<Tarefa> = mutableListOf()
 
-    fun inicializar() {
+    fun inicializar(context: Context) {
         viewModelScope.launch {
             state.postValue(TarefasState.ListaTarefas(repository.getListTarefa() as MutableList<Tarefa>))
             tarefasMut.addAll(repository.getListTarefa() as MutableList<Tarefa>) //todo: teste, remover posteriormente
@@ -46,10 +50,13 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun adicionarTarefa(tarefa: Tarefa) {
+    fun adicionarTarefa(tarefa: Tarefa, context: Context) {
         tarefasMut.add(tarefa)
         tarefas.postValue(tarefasMut)
         state.postValue(TarefasState.ListaTarefas(tarefasMut))
+        viewModelScope.launch {
+//                TarefaDatabase(context).getTarefaDao().adicionarTarefa(tarefa)
+        }
     }
 
     private fun exibirMensagem(msg: String) {

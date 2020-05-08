@@ -199,7 +199,7 @@ class GerenciadorSQLiteRepository :
         val comentario = cursor.getString(cursor.getColumnIndex(COLUMN_COMENTARIO))
         val concluida = cursor.getInt(cursor.getColumnIndex(COLUMN_CONCLUIDA))
 
-        return Tarefa(id, titulo, descricao, comentario, concluida)
+        return Tarefa(titulo, descricao, comentario, concluida)
     }
 
 

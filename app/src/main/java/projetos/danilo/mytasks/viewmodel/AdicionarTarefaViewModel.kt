@@ -12,7 +12,7 @@ class AdicionarTarefaViewModel: ViewModel() {
     val descricao: MutableLiveData<String> = MutableLiveData()
     val comentario: MutableLiveData<String> = MutableLiveData()
 
-    private var tarefa: Tarefa = Tarefa(0, "", "", "", 0)
+    private var tarefa: Tarefa = Tarefa("", "", "", 0)
     
     fun setTitulo(titulo: String){
         if(titulo.length > 3){
