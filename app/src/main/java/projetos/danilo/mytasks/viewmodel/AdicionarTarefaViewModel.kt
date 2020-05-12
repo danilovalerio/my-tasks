@@ -8,29 +8,36 @@ import projetos.danilo.mytasks.model.Tarefa
 class AdicionarTarefaViewModel: ViewModel() {
 
     val tarefaAtualizada: MutableLiveData<Tarefa> = MutableLiveData()
-    val titulo: MutableLiveData<String> = MutableLiveData()
-    val descricao: MutableLiveData<String> = MutableLiveData()
-    val comentario: MutableLiveData<String> = MutableLiveData()
+//    var titulo: MutableLiveData<String> = MutableLiveData()
+//    var descricao: MutableLiveData<String> = MutableLiveData()
+//    var comentario: MutableLiveData<String> = MutableLiveData()
 
-    private var tarefa: Tarefa = Tarefa("", "", "", 0)
+    private lateinit var tituloAtualizado: String
+    private lateinit var descricaoAtualiado: String
+    private lateinit var comentarioAtualizado: String
+
+    private var tarefaAtual: Tarefa = Tarefa(0,"", "", "", 0)
+//    private var tarefaAtual: Tarefa
     
     fun setTitulo(titulo: String){
         if(titulo.length > 3){
-            this.tarefa.titulo = titulo
-            tarefaAtualizada.value = tarefa
+            tarefaAtual.titulo = titulo
+            tarefaAtualizada.postValue(tarefaAtual)
         }
     }
     
     fun setDescricao(descricao: String){
-        this.descricao.postValue(descricao)
+        if(descricao.length > 3){
+            tarefaAtual.descricao = descricao
+            tarefaAtualizada.postValue(tarefaAtual)
+        }
     }
     
     fun setComentario(comentario: String){
-        this.comentario.postValue(comentario)
-    }
-
-    fun adicionarTarefa(){
-
+        if(comentario.length > 3){
+            tarefaAtual.comentario = comentario
+            tarefaAtualizada.postValue(tarefaAtual)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

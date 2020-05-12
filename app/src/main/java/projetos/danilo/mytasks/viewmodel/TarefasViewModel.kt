@@ -1,14 +1,9 @@
 package projetos.danilo.mytasks.viewmodel
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import projetos.danilo.mytasks.activity.TarefasActivity
 import projetos.danilo.mytasks.data.Repository
-import projetos.danilo.mytasks.data.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
@@ -21,20 +16,16 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
     val viewState: LiveData<TarefasState> = state
     val viewEvent: LiveData<TarefasEvent> = event
 
-    var tarefas = MutableLiveData<MutableList<Tarefa>>()
-
     var tarefasMut: MutableList<Tarefa> = mutableListOf()
 
-    fun inicializar(context: Context) {
+    fun inicializar() {
         viewModelScope.launch {
             state.postValue(TarefasState.ListaTarefas(repository.getListTarefa() as MutableList<Tarefa>))
-            tarefasMut.addAll(repository.getListTarefa() as MutableList<Tarefa>) //todo: teste, remover posteriormente
         }
     }
 
-    /** Interpretar as ações do usuário como cliques e também são mapeados por sealed class */
+    /** Interpretar as ações do usuário como cliques e mapeados por sealed class */
     fun interpretar(interactor: TarefasInteractor) {
-        Log.i("InteractorViewModel: ", interactor.toString())
         when (interactor) {
             is TarefasInteractor.ClickNovaTarefa -> navegaTelaAdicionarTarefa()
             is TarefasInteractor.ExibeMensagemToastCurta -> exibirMensagem(interactor.msg)
@@ -50,13 +41,13 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun adicionarTarefa(tarefa: Tarefa, context: Context) {
-        tarefasMut.add(tarefa)
-        tarefas.postValue(tarefasMut)
-        state.postValue(TarefasState.ListaTarefas(tarefasMut))
+    //todo: deixar private e criar interactor
+    fun adicionarTarefa(tarefa: Tarefa) {
         viewModelScope.launch {
-//                TarefaDatabase(context).getTarefaDao().adicionarTarefa(tarefa)
+            repository.adicionarTarefa(tarefa)
+            state.postValue(TarefasState.ListaTarefas(repository.getListTarefa() as MutableList<Tarefa>))
         }
+
     }
 
     private fun exibirMensagem(msg: String) {
@@ -69,20 +60,37 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
         event.value = TarefasEvent.ClickTarefa(tarefa)
     }
 
-    private fun excluir(tarefa: Tarefa, position: Int) {
-        GlobalScope.launch {
-//            useCase.deleteTarefa(position.toString()) //todo: Passar conta para exclusao
+    //todo: deixar private e criar interactor
+    fun excluirTarefa(tarefa: Tarefa) {
+        tarefasMut.clear()
+        viewModelScope.launch {
+            try {
+                repository.deletarTarefa(tarefa)
+                Log.i("DADOS", "DADOS POS EXCLUSAO: " + repository.getListTarefa())
+            } catch (e: Exception) {
+                Log.i("DADOS", "ERRO NA EXCLUSAO: " + e.toString())
+            }
         }
     }
 
-    //    private fun confirmaExcluir(tarefa: Tarefa, position:Int){
-//        event.value = TarefasEvent.ExibeTelaExclusao(tarefa, position)
-//    }
-//
-//    private fun tarefaSelecionada(tarefa: Tarefa){
-//        event.value = TarefasEvent.TarefaSelecionado(tarefa)
-//    }
-//
+    fun alteraConclusaoDaTarefa(tarefa: Tarefa) {
+        var concluidaAlteracao = tarefa.concluida
+        if(concluidaAlteracao == 0){
+            concluidaAlteracao = 1
+        } else {
+            concluidaAlteracao = 0
+        }
+        viewModelScope.launch {
+            try {
+                repository.alterarConclusao(tarefa.id, concluidaAlteracao)
+                Log.i("DADOS", "SUCESSO AO ALTERAR CONCLUSAO: " + repository.getListTarefa())
+            } catch (e: java.lang.Exception) {
+                Log.i("DADOS", "ERRO AO ALTERAR CONCLUSAO: " + e.toString())
+            }
+        }
+
+    }
+
     fun buscaPorTiulo(termo: String) {
 //        if (termo.isNotEmpty()){
 //            notasLiveData.value = tarefasUseCase.buscarTarefasPorTitulo(termo)

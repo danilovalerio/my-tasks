@@ -11,11 +11,11 @@ data class AllTarefasResponse(
 }
 
 data class TarefaResponse(
-    var id: Long,
+    var id: Int,
     val titulo: String,
     val descricao: String,
     val comentario: String? = "-",
     val concluida: Int? = 0//0 false 1 true
 ) {
-    fun toTarefa() = Tarefa(titulo, descricao, comentario, concluida)
+    fun toTarefa() = Tarefa(id,titulo, descricao, comentario, concluida)
 }

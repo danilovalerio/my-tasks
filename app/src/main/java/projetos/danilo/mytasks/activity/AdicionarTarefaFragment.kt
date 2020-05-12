@@ -27,7 +27,6 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_adicionar_tarefas, container, false)
-//        viewModelTarefas = ViewModelProviders.of(this).get(TarefasViewModel::class.java)
         return view
     }
 
@@ -68,12 +67,12 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
         viewModel.tarefaAtualizada.observe(this, Observer {
             it?.let {
                 configuraTitulo(it.titulo)
-//                tv_titulo_fragment.text = it.titulo.toString()
             }
         })
     }
 
     private fun configuraTitulo(titulo: String) {
+        //todo: Exibir mensagem de obrigatoriedade do título
         btn_adicionar.isEnabled = !titulo.isNullOrBlank()
     }
 
@@ -92,8 +91,10 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
     private fun adicionarTarefa() {
         val tarefa = viewModel.tarefaAtualizada.value as Tarefa
 
-        viewModelTarefas.adicionarTarefa(tarefa, this.requireContext())
-        viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(resources.getString(R.string.texto_tarefa_adicionada_com_sucesso, tarefa.titulo)))
+        viewModelTarefas.adicionarTarefa(tarefa)
+        viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(
+            resources.getString(R.string.texto_tarefa_adicionada_com_sucesso, tarefa.titulo))
+        )
         this.dismiss()
     }
 }

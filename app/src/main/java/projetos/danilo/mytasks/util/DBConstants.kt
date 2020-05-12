@@ -1,5 +1,6 @@
-package projetos.danilo.mytasks.repository
+package projetos.danilo.mytasks.util
 
+//todo: atualiazar com base no room
 const val DATABASE_NAME = "dbTarefas"
 const val DATABASE_VERSION = 1
 const val TABLE_TAREFA = "tarefa"

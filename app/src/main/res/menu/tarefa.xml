@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="projetos.danilo.mytasks.activity.tarefas">
+<!--  //todo: adicionar eventos após refatoração  -->
     <item android:id="@+id/action_pesquisa"
         android:title="@string/action_pesquisa"
         android:icon="@drawable/ic_search"

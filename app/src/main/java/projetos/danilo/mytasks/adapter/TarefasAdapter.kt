@@ -29,7 +29,11 @@ class TarefasAdapter(
 
     override fun onBindViewHolder(holder: TarefasViewHolder, position: Int) {
         holder.bindView(tarefas[position], viewModel, position)
-//        holder.bindView(tarefas[position])
     }
 
+    fun setTarefas(tarefasAtualizadas: MutableList<Tarefa>){
+        tarefas.clear()
+        tarefas.addAll(tarefasAtualizadas)
+        notifyDataSetChanged()
+    }
 }

@@ -31,7 +31,7 @@ import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
 class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     //utilizar injecao de dependencia
-    private val tareafasdatabase by lazy { TarefaDatabase.invoke(baseContext) }
+    private val tareafasdatabase by lazy { TarefaDatabase.invoke(applicationContext) }
     private val cacheService by lazy { TarefasCacheServiceImpl() }
     private val repository by lazy { RepositoryImpl(cacheService, tareafasdatabase) }
     /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
@@ -43,20 +43,20 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     private var ultimoTermoProcurado: String = ""
     private var buscaView: SearchView? = null
 
-    val ACTIVITY_ADICIONAR_NOTA_REQUEST = 1
-    val ZERO_DEFAULT:Long = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tarefas)
 
         configurarBind()
-        //inicializa a instancia do banco de dados
-//        tarefasDatabase = TarefaDatabase.invoke(this)
 
         iniciarViewModel()
         inicializarObservers()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        Log.i("DADOS","VOLTAMOS PARA ACTIVITY TAREFAS")
+        viewModel.inicializar()
     }
 
     private fun configurarBind(){
@@ -70,15 +70,15 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun iniciarViewModel(){
-        viewModel.inicializar(this)
+        viewModel.inicializar()
     }
 
     fun inicializarObservers(){
-        viewModel.tarefas.observe(this, Observer {
-            Log.i("DADOS TAREFAS: ", it.toString())
-//            successCall(it as MutableList<Tarefa>)
-            configuraAdapter(it)
-        })
+//        viewModel.tarefas.observe(this, Observer {
+//            Log.i("DADOS TAREFAS: ", it.toString())
+////            successCall(it as MutableList<Tarefa>)
+//            configuraAdapter(it)
+//        })
 
         viewModel.viewState.observe(this, Observer { viewstate ->
             viewstate?.let {
@@ -108,22 +108,9 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun navegarParaTalhes(tarefa: Tarefa){
-            val intent = TarefasDetalhesActivity.getStartIntent(
-                this@TarefasActivity,
-                tarefa.id,
-                tarefa.titulo,
-                tarefa.descricao,
-                tarefa.comentario ?: " - ",
-                tarefa.concluida.toString()
-            )
-            this@TarefasActivity.startActivity(intent)
-    }
-
-    private fun tarefaSelecionada(tarefa: Tarefa){
-        val data = Intent()
-        data.putExtra("TAREFA_SELECIONADA", Tarefa(tarefa.titulo, tarefa.descricao,
-        tarefa.comentario, tarefa.concluida))
-        setResult(Activity.RESULT_OK, data)
+        Log.i("DADOS"," Tarefa para Intent: "+tarefa.toString())
+        val intent = TarefasDetalhesActivity.criarIntent(this, tarefa)
+        startActivity(intent)
     }
 
     private fun excluirTarefa(tarefa: Tarefa, position: Int){
@@ -144,20 +131,19 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun successCall(tarefas: MutableList<Tarefa>){
-        Log.i("DADOS", tarefas.toString())
+        Log.i("SUCCESS CALL DADOS", tarefas.toString())
         configuraAdapter(tarefas)
     }
 
     private fun configuraAdapter(tarefas: MutableList<Tarefa>){
         adapterTarefas = TarefasAdapter(tarefas, viewModel)
-
         recyclerViewTarefas.layoutManager = LinearLayoutManager(this)
         recyclerViewTarefas.setHasFixedSize(true)
         recyclerViewTarefas.adapter = adapterTarefas
-
         adapterTarefas.notifyDataSetChanged()
 
         if(tarefas.size == 0) {
+            //todo: adicionar uma View com a mensagem
             Log.i("MENSAGEM","NENHUMA TAREFA ENCONTRADA")
         }
     }

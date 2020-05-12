@@ -1,69 +1,90 @@
 package projetos.danilo.mytasks.activity
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.activity.base.BaseActivity
+import projetos.danilo.mytasks.data.RepositoryImpl
+import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
+import projetos.danilo.mytasks.data.db.TarefaDatabase
+import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.util.toastLong
 import projetos.danilo.mytasks.util.toastShort
+import projetos.danilo.mytasks.viewmodel.TarefasViewModel
+import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 class TarefasDetalhesActivity : BaseActivity() {
-//
-//    private val viewModelTarefas by lazy {
-//        providerTarefasViewModel(
-//            this
-//        )
-//    }
+
+    private val tarefa by lazy { intent.getParcelableExtra<Tarefa>(TAREFA) }
+
+    private val tareafasdatabase by lazy { TarefaDatabase.invoke(applicationContext) }
+    private val cacheService by lazy { TarefasCacheServiceImpl() }
+    private val repository by lazy { RepositoryImpl(cacheService, tareafasdatabase) }
+    private val viewModelTarefas by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tarefas_details)
 
         configurarToolbar(toolbarPrincipal, R.string.titulo_detalhe_tarefas, true)
-//        viewModelTarefas.initDatabase(this)
 
+        if(tarefa != null){
+            tv_notaDetalheTitulo.text = this.tarefa.titulo
+            tv_notaDetalheDescricao.text = this.tarefa.descricao
+            tv_notaComentario.text = this.tarefa.comentario
+            checkBoxConcluida.isChecked = this.tarefa.concluida == 1
+        }
+
+        configuraListeners()
+    }
+
+    private fun configuraListeners() {
         /**valores que vem da intent*/
-        tv_notaDetalheTitulo.text = intent.getStringExtra(EXTRA_TITULO)
-        tv_notaDetalheDescricao.text = intent.getStringExtra(EXTRA_DESCRICAO)
-        tv_notaComentario.text = intent.getStringExtra(EXTRA_COMENTARIO)
-
         imgbtn_excluir.setOnClickListener {
-            val idParaExclusao = intent.getStringExtra(EXTRA_ID)
-            val tituloNotaExcluida = intent.getStringExtra(EXTRA_TITULO)
-//            viewModelTarefas.deletarTarefa(idParaExclusao)
-            toastLong("Tarefa $tituloNotaExcluida excluída com sucesso!")
-            finish()
+//            viewModelTarefas.excluirTarefa(tarefa)
+            AlertDialog.Builder(this)
+                .setTitle("Excluir Tarefa")
+                .setMessage("Deseja confirmar a remoção da tarefa ${tarefa.titulo}?")
+                .setPositiveButton(
+                    "sim"
+                ){_,_ ->
+                    viewModelTarefas.excluirTarefa(tarefa)
+                    toastLong("Tarefa ${tarefa.titulo} excluída com sucesso!")
+                    finish()
+//                    viewModel.interpretar(
+//                        TarefasInteractor.ClickConfirmarExcluirTarefa(
+//                            tarefa, position
+//                        )
+//                    )
+                }
+                .setNegativeButton("não", null)
+                .show()
+
         }
 
         checkBoxConcluida.setOnClickListener {
-            val idParaAtualizar = intent.getStringExtra(EXTRA_ID)
-            val conclusao = intent.getStringExtra(EXTRA_CONCLUSAO)
-            toastShort("Clicou")
-//            viewModelTarefas.alterarConclusao(idParaAtualizar, conclusao)
+            toastShort("Clicou id:"+tarefa.id)
+            viewModelTarefas.alteraConclusaoDaTarefa(tarefa)
         }
     }
 
-    /** objeto Nota para essa activity*/
+    /** conteúdo estático */
     companion object{
-        private const val EXTRA_ID = "EXTRA_ID"
-        private const val EXTRA_TITULO = "EXTRA_TITULO"
-        private const val EXTRA_DESCRICAO = "EXTRA_DESCRICAO"
-        private const val EXTRA_COMENTARIO = "EXTRA_COMENTARIO"
-        private const val EXTRA_CONCLUSAO = "EXTRA_CONCLUSAO"
+        private const val TAREFA = "TAREFA"
 
-        fun getStartIntent(ctx: Context, id: Long, titulo: String, descricao: String, comentario: String, conclusao: String): Intent {
+        fun criarIntent(ctx: Context, tarefa: Tarefa): Intent {
             /**Intent(activity de origem, activity de destino*/
-            val intent = Intent(ctx, TarefasDetalhesActivity::class.java)
-            intent.putExtra(EXTRA_ID, id.toString())
-            intent.putExtra(EXTRA_TITULO, titulo)
-            intent.putExtra(EXTRA_DESCRICAO, descricao)
-            intent.putExtra(EXTRA_COMENTARIO, comentario)
-            intent.putExtra(EXTRA_CONCLUSAO, conclusao)
-
-            return intent
+           return Intent(ctx, TarefasDetalhesActivity::class.java).apply {
+               putExtra(TAREFA, tarefa)
+            }
         }
     }
 }

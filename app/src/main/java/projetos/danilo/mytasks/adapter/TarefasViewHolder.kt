@@ -9,8 +9,7 @@ import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 
-class TarefasViewHolder(
-    itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TarefasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val titulo = itemView.tv_tituloTarefa
     val descricao = itemView.tv_descricaoTarefa
     val comentario = itemView.tv_comentarioTarefa
