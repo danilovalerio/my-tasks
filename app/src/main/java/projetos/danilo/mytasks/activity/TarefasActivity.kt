@@ -1,8 +1,6 @@
 package projetos.danilo.mytasks.activity
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -19,21 +17,28 @@ import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.activity.base.BaseActivity
 import projetos.danilo.mytasks.adapter.TarefasAdapter
-import projetos.danilo.mytasks.data.RepositoryImpl
-import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
-import projetos.danilo.mytasks.data.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.repository.RepositoryImpl
+import projetos.danilo.mytasks.repository.TarefasCacheServiceImpl
+import projetos.danilo.mytasks.repository.db.TarefaDatabase
 import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
-class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
+    MenuItem.OnActionExpandListener {
     //utilizar injecao de dependencia
     private val tareafasdatabase by lazy { TarefaDatabase.invoke(applicationContext) }
     private val cacheService by lazy { TarefasCacheServiceImpl() }
-    private val repository by lazy { RepositoryImpl(cacheService, tareafasdatabase) }
+    private val repository by lazy {
+        RepositoryImpl(
+            cacheService,
+            tareafasdatabase
+        )
+    }
+
     /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
     private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
@@ -55,11 +60,11 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
     override fun onResume() {
         super.onResume()
-        Log.i("DADOS","VOLTAMOS PARA ACTIVITY TAREFAS")
+        Log.i("DADOS", "VOLTAMOS PARA ACTIVITY TAREFAS")
         viewModel.inicializar()
     }
 
-    private fun configurarBind(){
+    private fun configurarBind() {
         recyclerViewTarefas = findViewById(R.id.recyclerTarefas)
         configurarToolbar(toolbarPrincipal, R.string.titulo_minhas_tarefas)
 
@@ -69,11 +74,11 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         }
     }
 
-    private fun iniciarViewModel(){
+    private fun iniciarViewModel() {
         viewModel.inicializar()
     }
 
-    fun inicializarObservers(){
+    fun inicializarObservers() {
 //        viewModel.tarefas.observe(this, Observer {
 //            Log.i("DADOS TAREFAS: ", it.toString())
 ////            successCall(it as MutableList<Tarefa>)
@@ -82,7 +87,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
         viewModel.viewState.observe(this, Observer { viewstate ->
             viewstate?.let {
-                when(it){
+                when (it) {
                     is TarefasState.ListaTarefas -> successCall(it.listaTarefa)
                 }
             }
@@ -90,7 +95,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
         viewModel.viewEvent.observe(this, Observer { viewstate ->
             viewstate?.let {
-                when(it){
+                when (it) {
                     is TarefasEvent.NovaTarefa -> abrirBottomSheetAdicionarTarefa()
                     is TarefasEvent.ExibeMensagemCurta -> exibirMensagemCurta(it.msg)
                     is TarefasEvent.ClickTarefa -> navegarParaTalhes(it.tarefa)
@@ -99,56 +104,39 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         })
     }
 
-    private fun abrirBottomSheetAdicionarTarefa(){
+    private fun abrirBottomSheetAdicionarTarefa() {
         abriBottomSheet(AdicionarTarefaFragment())
     }
 
-    private fun abriBottomSheet(bottomSheet: BottomSheetDialogFragment){
+    private fun abriBottomSheet(bottomSheet: BottomSheetDialogFragment) {
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)
     }
 
-    private fun navegarParaTalhes(tarefa: Tarefa){
-        Log.i("DADOS"," Tarefa para Intent: "+tarefa.toString())
+    private fun navegarParaTalhes(tarefa: Tarefa) {
+        Log.i("DADOS", " Tarefa para Intent: " + tarefa.toString())
         val intent = TarefasDetalhesActivity.criarIntent(this, tarefa)
         startActivity(intent)
     }
 
-    private fun excluirTarefa(tarefa: Tarefa, position: Int){
-        AlertDialog.Builder(this)
-            .setTitle("Excluir Tarefa")
-            .setMessage("Deseja confirmar a remoção da tarefa ${tarefa.titulo}?")
-            .setPositiveButton(
-                "sim"
-            ){_,_ ->
-                viewModel.interpretar(
-                    TarefasInteractor.ClickConfirmarExcluirTarefa(
-                        tarefa, position
-                    )
-                )
-            }
-            .setNegativeButton("não", null)
-            .show()
-    }
-
-    private fun successCall(tarefas: MutableList<Tarefa>){
+    private fun successCall(tarefas: MutableList<Tarefa>) {
         Log.i("SUCCESS CALL DADOS", tarefas.toString())
         configuraAdapter(tarefas)
     }
 
-    private fun configuraAdapter(tarefas: MutableList<Tarefa>){
+    private fun configuraAdapter(tarefas: MutableList<Tarefa>) {
         adapterTarefas = TarefasAdapter(tarefas, viewModel)
         recyclerViewTarefas.layoutManager = LinearLayoutManager(this)
         recyclerViewTarefas.setHasFixedSize(true)
         recyclerViewTarefas.adapter = adapterTarefas
         adapterTarefas.notifyDataSetChanged()
 
-        if(tarefas.size == 0) {
+        if (tarefas.size == 0) {
             //todo: adicionar uma View com a mensagem
-            Log.i("MENSAGEM","NENHUMA TAREFA ENCONTRADA")
+            Log.i("MENSAGEM", "NENHUMA TAREFA ENCONTRADA")
         }
     }
 
-    private fun exibirMensagemCurta(msg: String){
+    private fun exibirMensagemCurta(msg: String) {
         toastShort(msg)
     }
 
@@ -162,8 +150,8 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
         buscaView?.queryHint = getString(R.string.action_hint_pesquisa)
         buscaView?.setOnQueryTextListener(this)
 
-        if(ultimoTermoProcurado.isNotEmpty()){
-            Handler().post{
+        if (ultimoTermoProcurado.isNotEmpty()) {
+            Handler().post {
                 val query = ultimoTermoProcurado
                 buscaTarefa.expandActionView()
                 buscaView?.setQuery(query, true)
@@ -176,7 +164,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item.itemId){
+        when (item.itemId) {
             R.id.action_ocultar -> {
 //                aoClicarItemMenu()
             }
@@ -192,16 +180,16 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     override fun onQueryTextSubmit(query: String?) = true
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        ultimoTermoProcurado = newText?: ""
+        ultimoTermoProcurado = newText ?: ""
         Log.i("TEXTO_PROCURADO", ultimoTermoProcurado)
-        if(ultimoTermoProcurado.length > 3){
+        if (ultimoTermoProcurado.length > 3) {
             viewModel.buscaPorTiulo(ultimoTermoProcurado)
         }
         return true
     }
 
     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-        Log.i("EXPANDIR","EXPANDINDO SEARCHVIEW")
+        Log.i("EXPANDIR", "EXPANDINDO SEARCHVIEW")
         onQueryTextSubmit("")
         return true //para expandir a View
     }
@@ -209,7 +197,7 @@ class TarefasActivity : BaseActivity(),  SearchView.OnQueryTextListener, MenuIte
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         ultimoTermoProcurado = ""
         //limpa a busca para voltar ao normal
-        Log.i("TEXTO_PROCURADO", "TEXTO LIMPO"+ultimoTermoProcurado)
+        Log.i("TEXTO_PROCURADO", "TEXTO LIMPO" + ultimoTermoProcurado)
         viewModel.buscaPorTiulo(ultimoTermoProcurado)
         return true
     }

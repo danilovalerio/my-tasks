@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.data
+package projetos.danilo.mytasks.repository
 
 import projetos.danilo.mytasks.model.Tarefa
 

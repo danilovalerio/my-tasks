@@ -3,7 +3,7 @@ package projetos.danilo.mytasks.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import projetos.danilo.mytasks.data.Repository
+import projetos.danilo.mytasks.repository.Repository
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor

@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.data.db
+package projetos.danilo.mytasks.repository.db
 
 import android.content.Context
 import androidx.room.Database
@@ -18,8 +18,12 @@ abstract class TarefaDatabase : RoomDatabase() {
         private var instance: TarefaDatabase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: buildDatabase(context).also {
+        operator fun invoke(context: Context) = instance
+            ?: synchronized(LOCK){
+            instance
+                ?: buildDatabase(
+                    context
+                ).also {
                 instance = it
             }
         }

@@ -1,6 +1,6 @@
-package projetos.danilo.mytasks.data
+package projetos.danilo.mytasks.repository
 
-import projetos.danilo.mytasks.data.db.TarefaDatabase
+import projetos.danilo.mytasks.repository.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
 
 interface Repository {

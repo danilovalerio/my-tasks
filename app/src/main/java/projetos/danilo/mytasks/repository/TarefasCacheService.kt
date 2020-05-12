@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.data
+package projetos.danilo.mytasks.repository
 
 import projetos.danilo.mytasks.model.Tarefa
 
@@ -6,7 +6,8 @@ interface TarefaCacheService {
     fun getTarefas(): List<Tarefa>
 }
 
-class TarefasCacheServiceImpl : TarefaCacheService {
+class TarefasCacheServiceImpl :
+    TarefaCacheService {
     override fun getTarefas(): List<Tarefa> {
         val tarefa1: Tarefa = Tarefa(
             0,

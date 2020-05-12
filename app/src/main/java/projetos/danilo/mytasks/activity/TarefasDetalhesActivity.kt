@@ -1,25 +1,21 @@
 package projetos.danilo.mytasks.activity
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.activity.base.BaseActivity
-import projetos.danilo.mytasks.data.RepositoryImpl
-import projetos.danilo.mytasks.data.TarefasCacheServiceImpl
-import projetos.danilo.mytasks.data.db.TarefaDatabase
+import projetos.danilo.mytasks.repository.RepositoryImpl
+import projetos.danilo.mytasks.repository.TarefasCacheServiceImpl
+import projetos.danilo.mytasks.repository.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.util.toastLong
 import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
-import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 class TarefasDetalhesActivity : BaseActivity() {
 
@@ -27,7 +23,12 @@ class TarefasDetalhesActivity : BaseActivity() {
 
     private val tareafasdatabase by lazy { TarefaDatabase.invoke(applicationContext) }
     private val cacheService by lazy { TarefasCacheServiceImpl() }
-    private val repository by lazy { RepositoryImpl(cacheService, tareafasdatabase) }
+    private val repository by lazy {
+        RepositoryImpl(
+            cacheService,
+            tareafasdatabase
+        )
+    }
     private val viewModelTarefas by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

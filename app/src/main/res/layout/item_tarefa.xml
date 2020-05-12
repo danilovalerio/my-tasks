@@ -4,12 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:background="@drawable/bg_item_tarefa"
+    android:layout_margin="4dp"
+    android:elevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_tituloTarefa"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="@dimen/margin_texto_item_tarefa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,7 +23,7 @@
             android:id="@+id/tv_tituloTarefa"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/texto_titulo"
             app:layout_constraintEnd_toStartOf="@+id/checkBoxConcluida"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,8 +42,7 @@
             app:layout_constraintStart_toEndOf="@+id/tv_tituloTarefa"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="160dp"
-            tools:layout_editor_absoluteY="50dp"
-            android:visibility="gone"/>
+            tools:layout_editor_absoluteY="50dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -48,6 +51,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_marginStart="@dimen/margin_texto_item_tarefa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_tituloTarefa"
@@ -60,6 +64,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_marginStart="@dimen/margin_texto_item_tarefa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_descricaoTarefa"
@@ -67,14 +72,14 @@
         android:maxLines="1"
         android:ellipsize="end"/>
 
-    <View
-        android:id="@+id/view_divisor"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:background="@color/gray"
-        app:layout_constraintTop_toBottomOf="@+id/tv_comentarioTarefa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+<!--    <View-->
+<!--        android:id="@+id/view_divisor"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:background="@color/gray"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_comentarioTarefa"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

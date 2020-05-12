@@ -1,4 +1,4 @@
-package projetos.danilo.mytasks.data.db
+package projetos.danilo.mytasks.repository.db
 
 import androidx.room.*
 import projetos.danilo.mytasks.model.Tarefa
