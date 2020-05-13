@@ -1,6 +1,5 @@
 package projetos.danilo.mytasks.activity
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -38,6 +37,8 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
             tareafasdatabase
         )
     }
+
+    private var exibirTarefasConcluidas:Boolean = true
 
     /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
     private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
@@ -79,12 +80,6 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
     }
 
     fun inicializarObservers() {
-//        viewModel.tarefas.observe(this, Observer {
-//            Log.i("DADOS TAREFAS: ", it.toString())
-////            successCall(it as MutableList<Tarefa>)
-//            configuraAdapter(it)
-//        })
-
         viewModel.viewState.observe(this, Observer { viewstate ->
             viewstate?.let {
                 when (it) {
@@ -165,8 +160,8 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.action_ocultar -> {
-//                aoClicarItemMenu()
+            R.id.action_ocultar_exibir_concluidas -> {
+                toastShort("Clicou")
             }
 //            R.id.action_nova -> {
 //                val intent = Intent(this, AdicionarTarefasActivity::class.java)

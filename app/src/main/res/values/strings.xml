@@ -24,7 +24,7 @@
 
     <!--  Opções do MENU ActionBar  -->
     <string name="action_pesquisa">Pesquisar</string>
-    <string name="action_nova_tarefa">Nova Tarefa</string>
+    <string name="action_nova_tarefa">Exibir ou Ocultar tarefas concluídas</string>
     <string name="action_info">Info</string>
     <string name="action_hint_pesquisa">Procurar por Tarefa</string>
 

@@ -1,5 +1,6 @@
 package projetos.danilo.mytasks.adapter
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_tarefa.view.*
@@ -23,6 +24,11 @@ class TarefasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         itemView.setOnClickListener {
             viewModel.interpretar(TarefasInteractor.ClickItem(tarefa))
+        }
+
+        itemView.checkBoxConcluida.setOnClickListener {
+            Log.i("DADOS", "CLICOU EM ${tarefa.id}")
+            viewModel.alteraConclusaoDaTarefa(tarefa)
         }
     }
 }

@@ -1,6 +1,7 @@
 package projetos.danilo.mytasks.repository.db
 
 import androidx.room.*
+import projetos.danilo.mytasks.model.ListaTarefa
 import projetos.danilo.mytasks.model.Tarefa
 
 @Dao
@@ -26,5 +27,8 @@ interface TarefaDao {
 
     @Query("UPDATE Tarefa SET concluida = :concluida WHERE id = :id")
     suspend fun alterarConclusao(id: Int,  concluida: Int)
+
+    @Query("SELECT * FROM Tarefa WHERE concluida = :concluida")
+    suspend fun exibirOcultarConcluidas(concluida: Int) : List<Tarefa>
 
 }

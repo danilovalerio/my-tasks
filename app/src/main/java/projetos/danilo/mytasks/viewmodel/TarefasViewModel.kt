@@ -83,8 +83,22 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             try {
                 repository.alterarConclusao(tarefa.id, concluidaAlteracao)
+                inicializar()
                 Log.i("DADOS", "SUCESSO AO ALTERAR CONCLUSAO: " + repository.getListTarefa())
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
+                Log.i("DADOS", "ERRO AO ALTERAR CONCLUSAO: " + e.toString())
+            }
+        }
+
+    }
+
+    fun exibeOcultaTarefasConcluidas(exibirConcluidas: Int){
+        viewModelScope.launch {
+            try {
+//                repository.exibirOcultarConcluidas(exibirConcluidas)
+                state.postValue(TarefasState.ListaTarefas(repository.exibirOcultarConcluidas(exibirConcluidas) as MutableList<Tarefa>))
+                Log.i("DADOS", "LISTA RETORNADA: "+repository.exibirOcultarConcluidas(exibirConcluidas).toString())
+            } catch (e: Exception) {
                 Log.i("DADOS", "ERRO AO ALTERAR CONCLUSAO: " + e.toString())
             }
         }

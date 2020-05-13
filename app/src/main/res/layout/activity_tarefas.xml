@@ -14,17 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_testeviewmodel_nota"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/teste_view_model"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            android:gravity="center"/>-->
-
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -32,6 +21,9 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        app:fabSize="normal"
+        app:rippleColor="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_add_circle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +31,7 @@
 
     <!--  Exibe o 1 filho dele por padrão  -->
     <ViewFlipper
-        android:id="@+id/viewFlipperBooks"
+        android:id="@+id/viewFlipperTarefas"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,15 +61,5 @@
             tools:text="Erro 401" />
 
     </ViewFlipper>
-
-    <!--    <Button-->
-<!--        android:id="@+id/btn_adicionar_nota"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/texto_botao_adicionar"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:gravity="center"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
@@ -42,6 +44,7 @@ class TarefasDetalhesActivity : BaseActivity() {
             tv_notaDetalheDescricao.text = this.tarefa.descricao
             tv_notaComentario.text = this.tarefa.comentario
             checkBoxConcluida.isChecked = this.tarefa.concluida == 1
+            Log.i("DADOS", "TAREFA ${tarefa.titulo} CONCLUIDA ${tarefa.concluida}")
         }
 
         configuraListeners()
@@ -72,7 +75,7 @@ class TarefasDetalhesActivity : BaseActivity() {
         }
 
         checkBoxConcluida.setOnClickListener {
-            toastShort("Clicou id:"+tarefa.id)
+//            toastShort("Clicou id:"+tarefa.id)
             viewModelTarefas.alteraConclusaoDaTarefa(tarefa)
         }
     }

@@ -9,7 +9,6 @@ open class BaseActivity : AppCompatActivity() {
     protected fun configurarToolbar(toolbar: Toolbar, tituloIdResource: Int, exibirBotaoVoltar: Boolean = false){
         toolbar.title = getString(tituloIdResource)
         setSupportActionBar(toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(exibirBotaoVoltar)
     }
 }
