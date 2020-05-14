@@ -1,25 +1,25 @@
 package projetos.danilo.mytasks.repository
 
-import projetos.danilo.mytasks.repository.db.TarefaDatabase
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.repository.db.TarefaDatabase
 
 interface Repository {
     suspend fun getListTarefa(): List<Tarefa>
 
     suspend fun adicionarTarefa(tarefa: Tarefa)
 
-    suspend fun excluirPorId(id: Int) : List<Tarefa>
+    suspend fun excluirPorId(id: Int): List<Tarefa>
 
     suspend fun alterarConclusao(id: Int, concluida: Int)
 
     suspend fun deletarTarefa(tarefa: Tarefa)
 
-    suspend fun exibirOcultarConcluidas(concluida: Int) : List<Tarefa>
+    suspend fun exibirOcultarConcluidas(concluida: Int): List<Tarefa>
 }
 
 class RepositoryImpl(
     private val cacheService: TarefaCacheService, private val tarefaDatabase: TarefaDatabase?
-): Repository {
+) : Repository {
     override suspend fun getListTarefa(): List<Tarefa> {
         return tarefaDatabase?.getTarefaDao()?.getAllTarefasOrdemAlfabetica() ?: listOf()
     }
@@ -41,7 +41,7 @@ class RepositoryImpl(
         tarefaDatabase?.getTarefaDao()?.deletarTarefa(tarefa)
     }
 
-    override suspend fun exibirOcultarConcluidas(concluida: Int) : List<Tarefa> {
+    override suspend fun exibirOcultarConcluidas(concluida: Int): List<Tarefa> {
         return tarefaDatabase?.getTarefaDao()?.exibirOcultarConcluidas(concluida) ?: listOf()
     }
 }

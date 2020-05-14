@@ -1,10 +1,7 @@
 package projetos.danilo.mytasks.activity
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -26,8 +23,7 @@ import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
 
-class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
-    MenuItem.OnActionExpandListener {
+class TarefasActivity : BaseActivity() {
     //utilizar injecao de dependencia
     private val tareafasdatabase by lazy { TarefaDatabase.invoke(applicationContext) }
     private val cacheService by lazy { TarefasCacheServiceImpl() }
@@ -37,8 +33,6 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
             tareafasdatabase
         )
     }
-
-    private var exibirTarefasConcluidas:Boolean = true
 
     /** TarefasViewModel.Factory(repository): Utiliza a factory disponível na viewmodel*/
     private val viewModel by viewModels<TarefasViewModel> { TarefasViewModel.Factory(repository) }
@@ -115,7 +109,19 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
 
     private fun successCall(tarefas: MutableList<Tarefa>) {
         Log.i("SUCCESS CALL DADOS", tarefas.toString())
-        configuraAdapter(tarefas)
+        configurarViewFlipper(tarefas)
+    }
+
+    private fun configurarViewFlipper(tarefas: MutableList<Tarefa>) {
+        if (tarefas.size == 0) {
+            //todo: adicionar uma View com a mensagem
+            Log.i("DADOS MENSAGEM", "NENHUMA TAREFA ENCONTRADA")
+            viewFlipperTarefas.displayedChild = 2 //todo: criar constante com nome de erro
+            tvError.text = "Nenhuma tarefa encontrada..."
+        } else {
+            configuraAdapter(tarefas)
+            viewFlipperTarefas.displayedChild = 0 //todo: criar constante com nome de tarefas
+        }
     }
 
     private fun configuraAdapter(tarefas: MutableList<Tarefa>) {
@@ -124,81 +130,9 @@ class TarefasActivity : BaseActivity(), SearchView.OnQueryTextListener,
         recyclerViewTarefas.setHasFixedSize(true)
         recyclerViewTarefas.adapter = adapterTarefas
         adapterTarefas.notifyDataSetChanged()
-
-        if (tarefas.size == 0) {
-            //todo: adicionar uma View com a mensagem
-            Log.i("MENSAGEM", "NENHUMA TAREFA ENCONTRADA")
-        }
     }
 
     private fun exibirMensagemCurta(msg: String) {
         toastShort(msg)
     }
-
-    /** Configuração das opções na Action Bar */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.tarefa, menu)
-
-        val buscaTarefa = menu?.findItem(R.id.action_pesquisa)
-        buscaTarefa?.setOnActionExpandListener(this)
-        buscaView = buscaTarefa?.actionView as SearchView
-        buscaView?.queryHint = getString(R.string.action_hint_pesquisa)
-        buscaView?.setOnQueryTextListener(this)
-
-        if (ultimoTermoProcurado.isNotEmpty()) {
-            Handler().post {
-                val query = ultimoTermoProcurado
-                buscaTarefa.expandActionView()
-                buscaView?.setQuery(query, true)
-                buscaView?.clearFocus()
-            }
-        }
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.action_ocultar_exibir_concluidas -> {
-                toastShort("Clicou")
-            }
-//            R.id.action_nova -> {
-//                val intent = Intent(this, AdicionarTarefasActivity::class.java)
-//                startActivityForResult(intent, ACTIVITY_ADICIONAR_NOTA_REQUEST)
-//            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onQueryTextSubmit(query: String?) = true
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        ultimoTermoProcurado = newText ?: ""
-        Log.i("TEXTO_PROCURADO", ultimoTermoProcurado)
-        if (ultimoTermoProcurado.length > 3) {
-            viewModel.buscaPorTiulo(ultimoTermoProcurado)
-        }
-        return true
-    }
-
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-        Log.i("EXPANDIR", "EXPANDINDO SEARCHVIEW")
-        onQueryTextSubmit("")
-        return true //para expandir a View
-    }
-
-    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        ultimoTermoProcurado = ""
-        //limpa a busca para voltar ao normal
-        Log.i("TEXTO_PROCURADO", "TEXTO LIMPO" + ultimoTermoProcurado)
-        viewModel.buscaPorTiulo(ultimoTermoProcurado)
-        return true
-    }
-
-    companion object {
-        const val EXTRA_SEARCH_TERM = "ultimaBusca"
-    }
-
 }

@@ -3,8 +3,8 @@ package projetos.danilo.mytasks.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import projetos.danilo.mytasks.repository.Repository
 import projetos.danilo.mytasks.model.Tarefa
+import projetos.danilo.mytasks.repository.Repository
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasState
@@ -75,7 +75,7 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
 
     fun alteraConclusaoDaTarefa(tarefa: Tarefa) {
         var concluidaAlteracao = tarefa.concluida
-        if(concluidaAlteracao == 0){
+        if (concluidaAlteracao == 0) {
             concluidaAlteracao = 1
         } else {
             concluidaAlteracao = 0
@@ -92,12 +92,22 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
 
     }
 
-    fun exibeOcultaTarefasConcluidas(exibirConcluidas: Int){
+    fun exibeOcultaTarefasConcluidas(exibirConcluidas: Int) {
         viewModelScope.launch {
             try {
 //                repository.exibirOcultarConcluidas(exibirConcluidas)
-                state.postValue(TarefasState.ListaTarefas(repository.exibirOcultarConcluidas(exibirConcluidas) as MutableList<Tarefa>))
-                Log.i("DADOS", "LISTA RETORNADA: "+repository.exibirOcultarConcluidas(exibirConcluidas).toString())
+                state.postValue(
+                    TarefasState.ListaTarefas(
+                        repository.exibirOcultarConcluidas(
+                            exibirConcluidas
+                        ) as MutableList<Tarefa>
+                    )
+                )
+                Log.i(
+                    "DADOS",
+                    "LISTA RETORNADA: " + repository.exibirOcultarConcluidas(exibirConcluidas)
+                        .toString()
+                )
             } catch (e: Exception) {
                 Log.i("DADOS", "ERRO AO ALTERAR CONCLUSAO: " + e.toString())
             }
