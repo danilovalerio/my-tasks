@@ -94,31 +94,29 @@
             android:textAlignment="center"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/btn_adicionar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_check"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary"
-        app:rippleColor="@color/colorAccent"
-        android:elevation="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_comentarioTarefa"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:alpha="0.38"
+        android:background="@drawable/ic_check_circle_green"
+        android:elevation="5dp"
+        android:enabled="false"
+        android:gravity="clip_horizontal"
+        app:layout_constraintEnd_toStartOf="@id/btn_cancelar"
+        app:layout_constraintTop_toBottomOf="@+id/til_comentarioTarefa" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/btn_cancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"
-        app:fabSize="normal"
-        app:backgroundTint="@color/design_default_color_error"
-        app:rippleColor="@color/colorAccent"
-        android:elevation="1dp"
-        android:onClick="disable"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="100dp"
+        android:background="@drawable/ic_cancel_circle"
+        android:contentDescription="@string/acessibilidade_texto_excluir_tarefa"
+        android:elevation="5dp"
+        android:gravity="clip_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_adicionar"
         app:layout_constraintTop_toBottomOf="@+id/til_comentarioTarefa" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

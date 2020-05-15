@@ -1,21 +1,15 @@
 package projetos.danilo.mytasks.activity
 
-import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_adicionar_tarefas.*
@@ -50,9 +44,6 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
         /** Cria a ViewModel usando um ViewModelProvider */
         viewModel = ViewModelProviders.of(this).get(AdicionarTarefaViewModel::class.java)
 
-
-        btn_adicionar.setBackgroundColor(resources.getColor(R.color.transparent))
-
         inicializarObservers()
         configurarListeners()
     }
@@ -73,36 +64,35 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
         }
 
         btn_adicionar.setOnClickListener {
-            if(!et_tituloTarefa.text.isNullOrBlank()){
-                adicionarTarefa()
-            } else {
-                Toast.makeText(context, "Título obrigatório", Toast.LENGTH_SHORT).show()
-            }
+            adicionarTarefa()
         }
 
-        et_tituloTarefa.onFocusChangeListener = View.OnFocusChangeListener(){ view: View, b: Boolean ->
-            Log.i("DADOS", "TITULO PERDEU O FOCO hasFocus "+ b)
-            if(!b){
-                validaEditText(et_tituloTarefa, til_tituloTarefa, et_tituloTarefa.hint)
+        et_tituloTarefa.onFocusChangeListener =
+            View.OnFocusChangeListener() { view: View, b: Boolean ->
+                Log.i("DADOS", "TITULO PERDEU O FOCO hasFocus " + b)
+                if (!b) {
+                    validaEditTextVazio(et_tituloTarefa, til_tituloTarefa, et_tituloTarefa.hint)
+                }
             }
-        }
     }
 
     private fun inicializarObservers() {
         viewModel.tarefaAtualizada.observe(viewLifecycleOwner, Observer {
+            Log.i("DADOS", "alteracao no titulo:" + it.titulo)
             it?.let {
-                configuraTitulo(it.titulo)
+                viewModel.botaoAdicionarAtivado.value?.let { ativado ->
+                    ativarDesativarBotaoAdicionar(
+                        ativado
+                    )
+                }
             }
         })
     }
 
-    private fun configuraTitulo(titulo: String) {
-        //todo: Exibir mensagem de obrigatoriedade do título
-        if (!titulo.isNullOrBlank()){
-            btn_adicionar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-        }
+    private fun ativarDesativarBotaoAdicionar(ativado: Boolean) {
+        Log.i("DADOS: ", "BOTAO ADICIONAR ATIVADO? ->" + ativado)
 
-
+        if (ativado) ativarBotao(btn_adicionar) else desativarBotao(btn_adicionar)
     }
 
     private fun configuraDescricao(descricao: String) {
@@ -120,22 +110,38 @@ class AdicionarTarefaFragment : BottomSheetDialogFragment() {
     private fun adicionarTarefa() {
         val tarefa = viewModel.tarefaAtualizada.value as Tarefa
 
-        viewModelTarefas.adicionarTarefa(tarefa)
-        viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(
-            resources.getString(R.string.texto_tarefa_adicionada_com_sucesso, tarefa.titulo))
+        viewModelTarefas.interpretar(TarefasInteractor.AdicionarTarefa(tarefa))
+
+        /**  viewModelTarefas.adicionarTarefa(tarefa)*/
+        viewModelTarefas.interpretar(
+            TarefasInteractor.ExibeMensagemToastCurta(
+                resources.getString(R.string.texto_tarefa_adicionada_com_sucesso, tarefa.titulo)
+            )
         )
         this.dismiss()
     }
 
-    //todo: Extrair para utils validaçoes
+//todo: Extrair para utils validaçoes
     /** valida se o EditText está vazio e com tamanho mínimo quando obrigatório*/
-    private fun validaEditText(editText: TextInputEditText, inputLayout: TextInputLayout,
-                               textoInformativo: CharSequence?){
-        if(editText.text.isNullOrBlank()){
+    private fun validaEditTextVazio(
+        editText: TextInputEditText, inputLayout: TextInputLayout,
+        textoInformativo: CharSequence?
+    ) {
+        if (editText.text.isNullOrBlank()) {
             inputLayout.error = "${textoInformativo.toString()} obrigatório"
             inputLayout.setErrorTextAppearance(R.style.ThemeOverlay_AppCompat_Dialog_Alert)
         } else {
             inputLayout.error = ""
         }
+    }
+
+    private fun ativarBotao(btn: Button) {
+        btn.isEnabled = true
+        btn.alpha = 1F
+    }
+
+    private fun desativarBotao(btn: Button) {
+        btn_adicionar.isEnabled = false
+        btn_adicionar.alpha = 0.3F
     }
 }

@@ -33,5 +33,6 @@
     <string name="hint_descricao">Descricão</string>
     <string name="hint_comentario">Comentário...</string>
     <string name="texto_titulo_adicionar_tarefa">Adicionar tarefa</string>
+    <string name="acessibilidade_texto_excluir_tarefa">Excluir tarefa</string>
 
 </resources>

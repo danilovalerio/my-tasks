@@ -59,7 +59,8 @@ class TarefasDetalhesActivity : BaseActivity() {
                 .setPositiveButton(
                     "sim"
                 ){_,_ ->
-                    viewModelTarefas.excluirTarefa(tarefa)
+//                    viewModelTarefas.excluirTarefa(tarefa)
+                    viewModelTarefas.interpretar(TarefasInteractor.ClickExcluirTarefa(tarefa))
                     toastLong("Tarefa ${tarefa.titulo} excluída com sucesso!")
                     viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(
                         "Tarefa ${tarefa.titulo} excluída com sucesso!"

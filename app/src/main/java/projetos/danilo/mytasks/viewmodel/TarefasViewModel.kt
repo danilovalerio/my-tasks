@@ -31,7 +31,8 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
             is TarefasInteractor.ExibeMensagemToastCurta -> exibirMensagem(interactor.msg)
 
             is TarefasInteractor.ClickItem -> tarefaClicada(interactor.tarefa)
-//            is TarefasInteractor.AdicionarTarefa -> adicionarTarefa(interactor.tarefa)
+            is TarefasInteractor.AdicionarTarefa -> adicionarTarefa(interactor.tarefa)
+            is TarefasInteractor.ClickExcluirTarefa -> excluirTarefa(interactor.tarefa)
         }
     }
 
@@ -42,7 +43,7 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
     }
 
     //todo: deixar private e criar interactor
-    fun adicionarTarefa(tarefa: Tarefa) {
+    private fun adicionarTarefa(tarefa: Tarefa) {
         viewModelScope.launch {
             repository.adicionarTarefa(tarefa)
             state.postValue(TarefasState.ListaTarefas(repository.getListTarefa() as MutableList<Tarefa>))
@@ -61,7 +62,7 @@ class TarefasViewModel(private val repository: Repository) : ViewModel() {
     }
 
     //todo: deixar private e criar interactor
-    fun excluirTarefa(tarefa: Tarefa) {
+    private fun excluirTarefa(tarefa: Tarefa) {
         tarefasMut.clear()
         viewModelScope.launch {
             try {

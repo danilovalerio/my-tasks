@@ -1,43 +1,46 @@
 package projetos.danilo.mytasks.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import projetos.danilo.mytasks.model.Tarefa
 
-class AdicionarTarefaViewModel: ViewModel() {
+class AdicionarTarefaViewModel : ViewModel() {
+    //todo: implementar um interactor para deixar as funções privadas
 
     val tarefaAtualizada: MutableLiveData<Tarefa> = MutableLiveData()
-//    var titulo: MutableLiveData<String> = MutableLiveData()
-//    var descricao: MutableLiveData<String> = MutableLiveData()
-//    var comentario: MutableLiveData<String> = MutableLiveData()
+    val botaoAdicionarAtivado: MutableLiveData<Boolean> = MutableLiveData()
 
-    private lateinit var tituloAtualizado: String
-    private lateinit var descricaoAtualiado: String
-    private lateinit var comentarioAtualizado: String
-
-    private var tarefaAtual: Tarefa = Tarefa(0,"", "", "", 0)
+    private var tarefaAtual: Tarefa = Tarefa(0, "", "", "", 0)
 //    private var tarefaAtual: Tarefa
-    
-    fun setTitulo(titulo: String){
-        if(titulo.length > 3){
-            tarefaAtual.titulo = titulo
-            tarefaAtualizada.postValue(tarefaAtual)
-        }
+
+    fun setTitulo(titulo: String) {
+        botaoAdicionarAtivado.postValue(tamanhoMinimo(titulo))
+        tarefaAtual.titulo = titulo
+        tarefaAtualizada.postValue(tarefaAtual)
     }
-    
-    fun setDescricao(descricao: String){
-        if(descricao.length > 3){
+
+    fun setDescricao(descricao: String) {
+        if (descricao.length > 3) {
             tarefaAtual.descricao = descricao
             tarefaAtualizada.postValue(tarefaAtual)
         }
     }
-    
-    fun setComentario(comentario: String){
-        if(comentario.length > 3){
+
+    fun setComentario(comentario: String) {
+        if (comentario.length > 3) {
             tarefaAtual.comentario = comentario
             tarefaAtualizada.postValue(tarefaAtual)
         }
+    }
+
+    fun tamanhoMinimo(texto: String) : Boolean {
+        Log.i("DADOS", "tamanho minimo: "+texto.length)
+        if (!texto.isNullOrBlank() && texto.length > 2){
+            return true
+        }
+        return false
     }
 
     @Suppress("UNCHECKED_CAST")

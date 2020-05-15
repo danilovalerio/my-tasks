@@ -75,13 +75,14 @@
                     tools:layout_editor_absoluteY="50dp"
                     android:layout_gravity="center"/>
 
-                <ImageView
+                <Button
                     android:id="@+id/imgbtn_excluir"
-                    android:layout_marginLeft="10dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_delete"
-                    android:background="@color/transparent"/>
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/ic_delete"
+                    android:contentDescription="@string/acessibilidade_texto_excluir_tarefa"
+                    android:elevation="5dp" />
 
             </LinearLayout>
 
