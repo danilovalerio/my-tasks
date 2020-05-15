@@ -2,12 +2,14 @@ package projetos.danilo.mytasks.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_tarefas.*
 import kotlinx.android.synthetic.main.include_toolbar.toolbarPrincipal
 import projetos.danilo.mytasks.R
@@ -17,7 +19,6 @@ import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.repository.RepositoryImpl
 import projetos.danilo.mytasks.repository.TarefasCacheServiceImpl
 import projetos.danilo.mytasks.repository.db.TarefaDatabase
-import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasEvent
 import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
@@ -39,6 +40,7 @@ class TarefasActivity : BaseActivity() {
 
     private lateinit var recyclerViewTarefas: RecyclerView
     private lateinit var adapterTarefas: TarefasAdapter
+    private lateinit var snackbar: Snackbar
 
     private var ultimoTermoProcurado: String = ""
     private var buscaView: SearchView? = null
@@ -133,6 +135,19 @@ class TarefasActivity : BaseActivity() {
     }
 
     private fun exibirMensagemCurta(msg: String) {
-        toastShort(msg)
+        configuraSnackBar(msg)
+    }
+
+    private fun configuraSnackBar(msg: String){
+        snackbar = Snackbar.make(floatingActionButton, msg, Snackbar.LENGTH_LONG)
+        snackbar.setAction("FECHAR", View.OnClickListener {
+            snackbar.dismiss()
+        })
+
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+        snackbar.setTextColor(resources.getColor(R.color.white))
+        snackbar.setActionTextColor(resources.getColor(R.color.colorAccent))
+        snackbar.show()
     }
 }

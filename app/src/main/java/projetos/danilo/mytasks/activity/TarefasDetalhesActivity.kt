@@ -5,19 +5,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import kotlinx.android.synthetic.main.activity_tarefas_details.*
 import kotlinx.android.synthetic.main.include_toolbar.*
 import projetos.danilo.mytasks.R
 import projetos.danilo.mytasks.activity.base.BaseActivity
+import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.repository.RepositoryImpl
 import projetos.danilo.mytasks.repository.TarefasCacheServiceImpl
 import projetos.danilo.mytasks.repository.db.TarefaDatabase
-import projetos.danilo.mytasks.model.Tarefa
 import projetos.danilo.mytasks.util.toastLong
-import projetos.danilo.mytasks.util.toastShort
 import projetos.danilo.mytasks.viewmodel.TarefasViewModel
+import projetos.danilo.mytasks.viewmodel.states.tarefas.TarefasInteractor
 
 class TarefasDetalhesActivity : BaseActivity() {
 
@@ -62,6 +61,9 @@ class TarefasDetalhesActivity : BaseActivity() {
                 ){_,_ ->
                     viewModelTarefas.excluirTarefa(tarefa)
                     toastLong("Tarefa ${tarefa.titulo} excluída com sucesso!")
+                    viewModelTarefas.interpretar(TarefasInteractor.ExibeMensagemToastCurta(
+                        "Tarefa ${tarefa.titulo} excluída com sucesso!"
+                    ))
                     finish()
 //                    viewModel.interpretar(
 //                        TarefasInteractor.ClickConfirmarExcluirTarefa(
